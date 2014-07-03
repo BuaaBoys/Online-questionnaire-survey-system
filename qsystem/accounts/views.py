@@ -34,3 +34,7 @@ def login_submit(request):
 		is_error = True
 		error_msg = "E-mail does not exist"
 		return render(request, "accounts/login.html", {"error_msg":error_msg, "is_error":is_error})
+	if user.password == request.POST['password']:
+		
+
+
