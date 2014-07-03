@@ -5,7 +5,7 @@
 	<title>添加问卷基本信息</title>
 </head>
 <body>
-	<form action="#">
+	<form action="" method="post">{% csrf_token %}
 		问卷标题：
 		<input type="text" name="title">
 		<br>
@@ -15,6 +15,9 @@
 		问卷描述：
 		<textarea name="description" id="" cols="30" rows="10"></textarea>
 		<br>
+		<!--table>
+			{{ form.as_table }}
+		</table-->
 		<input type="submit" value="进入编辑问题页面">
 	</form>
 </body>
