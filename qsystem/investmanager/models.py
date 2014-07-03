@@ -9,7 +9,6 @@ class Questionnaire(models.Model):
 	title = models.CharField(max_length=255)
 	subject = models.CharField(max_length=255)
 	description = models.TextField(max_length=255)
-	content = models.PositiveIntegerField()
 	author = models.ForeignKey(User, related_name='Investigator')
 	date = models.DateTimeField()
 	closed = models.BooleanField()
