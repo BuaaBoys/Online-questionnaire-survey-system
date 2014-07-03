@@ -12,3 +12,4 @@ class Questionnaire(models.Model):
 	content = models.PositiveIntegerField()
 	author = models.ForeignKey(User, related_name='Investigator')
 	date = models.DateTimeField()
+	closed = models.BooleanField()
