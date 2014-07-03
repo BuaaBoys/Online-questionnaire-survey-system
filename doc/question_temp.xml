@@ -1,0 +1,18 @@
+<content id="123">
+	<single_choice id="1">
+		<question>sfdji</question>
+		<item>fdikjgsid</item>
+		...
+	</single_choice>
+	<multiply_choice id="2">
+		<question>sfdji</question>
+		<item>fdikjgsid</item>
+		...
+	</multiply_choice>
+	<truefalse id="3">
+		<question>sfdji</question>
+	</truefalse>
+	<essay id="4">
+		<question>sfdji</question>
+	</essay>
+</content>
