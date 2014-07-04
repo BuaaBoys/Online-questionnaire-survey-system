@@ -84,7 +84,7 @@ class Questions():
                 qnode.appendChild(itemNode)
             root.appendChild(qnode)
 
-        fileName = r'./data/' + 'new' + self.qid + '.xml'
+        fileName = r'./data/' + self.qid + '.xml'
         print fileName
         f = open(fileName, 'w')
 
