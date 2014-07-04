@@ -3,14 +3,19 @@ from xml.etree.ElementTree import ElementTree
 
 
 class Question():
-    qtype = ''
-    content = ''
-    items = []
+    # qtype = ''
+    # content = ''
+    # items = []
 
     def __init__(self, t, c, i):
         self.qtype = t
         self.content = c
         self.items = i
+
+    def __del__(self):
+        self.qtype = ''
+        self.content = ''
+        self.items = []
 
     def __unicode__(self):
         return self.content
@@ -20,13 +25,16 @@ class Question():
 
 
 class Questions():
-    qid = ''
-    questionList = []
+    # qid = ''
+    # questionList = []
 
     def __init__(self, qs=[], qid=''):
         self.qid = qid
-        for q in qs:
-            self.addQuestion(q)
+        self.questionList = qs
+
+    def __del__(self):
+        self.qid = ''
+        self.questionList = []
 
     def addQuestion(self, question):
         self.questionList.append(question)
