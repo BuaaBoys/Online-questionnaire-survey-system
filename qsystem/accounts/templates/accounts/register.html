@@ -6,6 +6,9 @@
     <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
 	<script type="text/javascript">
 		function submit(button) {
+			var time = new Date();
+			var date = time.getFullYear() + "/" + time.getMonth() + "/" + time.getDate();
+			document.getElementsByName("register_date")[0].val(date);
 			document.getElementsByTagName('form')[0].submit();
 		}
 	</script>
@@ -19,28 +22,49 @@
 					{% csrf_token %}
 					<div class="form-group">
 						<label for="InputEmail1">Email address</label>
-						<input type="email" class="form-control" name="email" placeholder="Enter email">
+						<input type="email" class="form-control" name="email" placeholder="Enter email" max="50" required>
 					</div>
 					<div class="form-group">
 						<label for="InputPassword1">Password</label>
-						<input type="password" class="form-control" name="password" placeholder="Password">
+						<input type="password" class="form-control" name="password" placeholder="Password: 5-20 Letters or numbers" required pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{5,12}$" maxlength="20">
+					</div>
+					<div class="form-group">
+						<label for="SelectSex row">Sex</label>
+						<br>
+						<div class="radio-inline">
+  							<label>
+   								<input type="radio" name="sex" id="SecretRadios" value=Secret checked>
+    								Secret
+ 							</label>
+ 						</div>
+ 						<div class="radio-inline">
+ 							<label>
+   								<input type="radio" name="sex" id="MaleRadios" value="Male">
+    								Male
+ 							</label>
+ 						</div>
+ 						<div class="radio-inline">
+							<label>
+   								<input type="radio" name="sex" id="FemaleRadios" value="Female">
+    								Female
+ 							</label>
+						</div>
 					</div>
 					<div class="form-group">
 						<label for="InputBirthday1">Birthday</label>
 						<input type="date" class="form-control" name="birthday" placeholder="Password">
 					</div>
-					<div class="checkbox">
-						<label>
-							<input type="checkbox"> Check me out
-						</label>
-					</div>
 					<input type="hidden" name="registered" value=True>
 					<input type="hidden" name="register_date" id="register_date">
-					<button type="submit" class="btn btn-primary" >Submit</button>
+					<button class="btn btn-primary" onlick="javascript:submit()">Submit</button>
 				</form>
 			</div>
 			<div class="col-md-3"></div>
 		</div>
 	</div>
+	<p>{{ li1 }}</p>
+	<p>{{ li2 }}</p>
 </body>
+
+
 
