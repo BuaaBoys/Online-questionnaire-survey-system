@@ -1,3 +1,23 @@
+function checkValid(){
+    var questElement = document.quest.elements;
+    for(var i=0; i<questElement.length-1;i++){
+	if(trim(questElement[i].value)==""){
+	    questElement[i].focus();
+	    questElement[i].style.background = "red";
+	    alert("请填写完整！");
+	    questElement[i].style.background = "white";
+	    return false;
+	    break;
+	}
+    }
+    return true;
+}
+
+function trim(str){
+    return str.replace(/^\s\s*/,'').replace(/\s\s*$/,'');
+}
+
+
 function add_question()
 {
     var parent = document.getElementById("upload");
