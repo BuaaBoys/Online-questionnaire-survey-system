@@ -7,6 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 def register(request):
 	is_error = "hidden"
 	error_msg = ""
+	print "Hello, world!"
 	return render(request, 'accounts/register.html', {"error_msg":error_msg, "is_error":is_error})
 
 def register_submit(request):
@@ -35,3 +36,4 @@ def login_submit(request):
 		error_msg = "E-mail does not exist"
 		return render(request, "accounts/login.html", {"error_msg":error_msg, "is_error":is_error})
 	if user.password == request.POST['password']:
+		pass
