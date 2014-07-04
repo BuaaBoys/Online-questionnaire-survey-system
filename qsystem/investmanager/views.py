@@ -16,8 +16,8 @@ from questions import *
 def show_quest_fill_page(request):
 	'''let investigator create the questionnaire'''
 
-	return render_to_response("investmanager/4_5.html", {})
-
+	#return render_to_response("investmanager/4_5.html", {})
+	return render(request, "investmanager/4_5.html", {})
 
 def publish(request):
 	'''pass basic infomation to next page
@@ -63,4 +63,4 @@ def quest(request, no):
 	subject = quest.subject
 	description = quest.description
 
-	return render_to_response("investmanager/show_quest.html",{'id':id, "title":title, "subject":subject, "description":description,})
+	return render(request, "investmanager/show_quest.html",{'id':id, "title":title, "subject":subject, "description":description,})

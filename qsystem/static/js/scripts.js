@@ -1,14 +1,14 @@
 ﻿function checkValid(){
     var questElement = document.quest.elements;
     for(var i=0; i<questElement.length-1;i++){
-	if(trim(questElement[i].value)==""){
-	    questElement[i].focus();
-	    questElement[i].style.background = "red";
-	    alert("请填写完整！");
-	    questElement[i].style.background = "white";
-	    return false;
-	    break;
-	}
+		if(trim(questElement[i].value)==""){
+			questElement[i].focus();
+			questElement[i].style.background = "red";
+			alert("请填写完整！");
+			questElement[i].style.background = "white";
+			return false;
+			break;
+		}
     }
     return true;
 }
@@ -28,7 +28,7 @@ function addQuestion() {
     var no = document.getElementsByClassName("question").length;
     
     var question = document.createElement("div");
-    question.setAttribute("class", "question");
+    question.setAttribute("class", "question form-group");
     
     var select = document.getElementById('select');
     var index = select.selectedIndex;
@@ -43,38 +43,41 @@ function addQuestion() {
 	
     question.id = selected.value;
     
+	var describe = document.createElement("textarea");
+	describe.setAttribute("class", "form-control");
+    describe.setAttribute("name", "question");
+	
+	var container = document.createElement("div");
+	//container.setAttribute("class", "col-sm-offset-4");
+	
     var delQue = document.createElement("input");
     delQue.setAttribute("type", "button");
-    delQue.setAttribute("class", "delItem");
+    delQue.setAttribute("class", "delItem btn btn-danger btn-xs");
     delQue.setAttribute("onclick", "deleteQuestion(this)");
     delQue.setAttribute("value", "删除本题");
-    
-    var describe = document.createElement("input");
-    describe.setAttribute("type", "text");
-    describe.setAttribute("name", "question");
 
-    var inc = document.createElement("input");
-    inc.setAttribute("type", "button");
-    inc.setAttribute("class", "addItem");
+    var inc = document.createElement("a");
+    inc.setAttribute("class", "addItem btn btn-link btn-xs");
     inc.setAttribute("onclick", "addItem(this)");
-    inc.setAttribute("value", "增加选项");
+	inc.textContent = "增加选项";
 
-    var del = document.createElement("input");
-    del.setAttribute("type", "button");
-    del.setAttribute("class", "delItem");
+    var del = document.createElement("a");
+
+    del.setAttribute("class", "delItem btn btn-link btn-xs");
     del.setAttribute("onclick", "deleteItem(this)");
-    del.setAttribute("value", "删除选项");
+	del.textContent = "删除选项";
 
 	question.appendChild(type);
     question.appendChild(para);
     question.appendChild(describe);
-    question.appendChild(delQue);
+    container.appendChild(delQue);
 	if (question.id == "single" || question.id == "multiply") {
-		question.appendChild(inc);
-		question.appendChild(del);
+		container.appendChild(inc);
+		container.appendChild(del);
 		addItem(inc);
 		addItem(inc);
 	}
+	question.appendChild(container);
     //appendNewLine(question);
     
     var submit = document.getElementById("addQuestion");
@@ -128,11 +131,12 @@ function addItem(obj) {
     var choose = document.createElement("input");
     var label = document.createElement("label");
     var text = document.createElement("input");
-    item.setAttribute("class", "item");
+    item.setAttribute("class", "item checkbox");
     choose.setAttribute("type", "checkbox");
-    choose.setAttribute("class", "checkbox");
-    label.textContent = (no + 1) + '.';
+    choose.setAttribute("class", "checkbox checkbox-inline");
+    label.textContent = "选项" + (no + 1) + '.';
     text.setAttribute("type", "text");
+	text.setAttribute("class", "form-control");
 	var index = document.getElementsByClassName("question").length;
     text.setAttribute("name", "items" + index);
     item.appendChild(choose);
@@ -158,8 +162,8 @@ function deleteItem(obj) {
     }
     items = parent.getElementsByClassName("item");
     for (var i=0; i<items.length; ++i) {
-	var label = items[i].getElementsByTagName("label")[0];
-	label.textContent = (i + 1) + '.';
+		var label = items[i].getElementsByTagName("label")[0];
+		label.textContent = "选项" + (i + 1) + '.';
     }	
 }
 
