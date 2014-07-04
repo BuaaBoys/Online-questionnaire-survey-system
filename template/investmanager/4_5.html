@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>添加问卷</title>
+	<script src="/static/scripts.js" type="text/javascript"></script>
+</head>
+<body>
+	<form id="upload" name="quest" action="publish" method="post" onSubmit="return checkValid()">{% csrf_token %}
+		<label>问卷标题：</label>
+		<input type="text" name="title" maxlength="255">
+		<br>
+		<label>调查对象：</label>
+		<input type="text" name="subject" maxlength="255">
+		<br>
+		<label>问卷描述：</label>
+		<textarea name="description" id="" cols="30" rows="10"></textarea>
+		<br>
+		<!--table>
+			{{ form.as_table }}
+		</table-->
+		<div id="addQuestion">
+			<label>问题类型：</label>
+			<select name="type" id="select">
+			<option value="single" selected="selected">单选题</option>
+			<option value="multply">多选题</option>
+			<option value="judge">判断题</option>
+			<option value="essay">简答题</option>
+			</select>
+			<button type="button" onclick="addQuestion()">添加</button>
+		</div>
+		<input type="submit" value="发布问卷">
+	</form>
+	<p>{{ id }}</p>
+	
+	
+</body>
+</html>
