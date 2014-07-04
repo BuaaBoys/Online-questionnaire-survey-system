@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>添加问卷基本信息</title>
+	<script type="text/javascript">
+		function checkValid(){
+			var questElement = document.quest.elements;
+			for(var i=0; i<questElement.length-1;i++){
+				if(trim(questElement[i].value)==""){
+					questElement[i].focus();
+					questElement[i].style.background = "red";
+					alert("请填写完整！");
+					questElement[i].style.background = "white";
+					return false;
+					break;
+				}
+			}
+			return true;
+		}
+
+		function trim(str){
+			return str.replace(/^\s\s*/,'').replace(/\s\s*$/,'');
+		}
+	</script>
+</head>
+<body>
+	<form name="quest" action="publish" method="post" onSubmit="return checkValid()">{% csrf_token %}
+		<label>问卷标题：</label>
+		<input type="text" name="title" maxlength="255">
+		<br>
+		<label>调查对象：</label>
+		<input type="text" name="subject" maxlength="255">
+		<br>
+		<label>问卷描述：</label>
+		<textarea name="description" id="" cols="30" rows="10"></textarea>
+		<br>
+		<!--table>
+			{{ form.as_table }}
+		</table-->
+		<input type="submit" value="发布问卷">
+	</form>
+	<p>{{ id }}</p>
+</body>
+</html>

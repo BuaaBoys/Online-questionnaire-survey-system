@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Internal Server Error: /accounts/register/
 Traceback (most recent call last):
   File "c:\Python27\lib\site-packages\django\core\handlers\base.py", line 103, in get_response
@@ -471,3 +472,6 @@ Traceback (most recent call last):
   File "d:\GitHub\Online-questionnaire-survey-system\qsystem\accounts\views.py", line 39, in login_submit
     response = HttpResponseRedirect(reverse('login', args=()))
 NameError: global name 'reverse' is not defined
+=======
+Not Found: /
+>>>>>>> b9e59dc343b2d5e802f6d5c2729e7b95eea2b9ea
