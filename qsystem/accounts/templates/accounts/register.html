@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet"/>
+    <script src="{{ STATIC_URL }}js/jquery.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		function submit(button) {
+			var time = new Date();
+			var date = time.getFullYear() + "/" + time.getMonth() + "/" + time.getDate();
+			document.getElementsByName("register_date")[0].val(date);
+			document.getElementsByTagName('form')[0].submit();
+		}
+	</script>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3"></div>
+			<div class="col-md-6">
+				<form role="form" action="{% url 'register_submit' %}" method="POST">
+					{% csrf_token %}
+					<div class="form-group">
+						<label for="InputEmail1">Email address</label>
+						<input type="email" class="form-control" name="email" placeholder="Enter email" max="50" required>
+						<div class="alert alert-danger alert-dismissible" {{ is_error }} role="alert">This E-mail address has benn used!</div>
+					</div>
+					<div class="form-group">
+						<label for="InputPassword1">Password</label>
+						<input type="password" class="form-control" name="password" placeholder="Password: 5-20 Letters or numbers" required pattern="^[a-zA-Z0-9-_\.]{5,12}$" maxlength="20">
+					</div>
+					<div class="form-group">
+						<label for="SelectSex row">Sex</label>
+						<br>
+						<div class="radio-inline">
+  							<label>
+   								<input type="radio" name="sex" id="SecretRadios" value=Secret checked>
+    								Secret
+ 							</label>
+ 						</div>
+ 						<div class="radio-inline">
+ 							<label>
+   								<input type="radio" name="sex" id="MaleRadios" value="Male">
+    								Male
+ 							</label>
+ 						</div>
+ 						<div class="radio-inline">
+							<label>
+   								<input type="radio" name="sex" id="FemaleRadios" value="Female">
+    								Female
+ 							</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="InputBirthday1">Birthday</label>
+						<input type="date" class="form-control" name="birthday" placeholder="Password">
+					</div>
+					<input type="hidden" name="registered" value=True>
+					<input type="hidden" name="register_date" id="register_date">
+					<button class="btn btn-primary" onlick="javascript:submit()">Submit</button>
+				</form>
+			</div>
+			<div class="col-md-3"></div>
+		</div>
+	</div>
+	<p>{{ li1 }}</p>
+	<p>{{ li2 }}</p>
+</body>
+
+
+
