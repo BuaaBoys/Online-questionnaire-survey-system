@@ -6,4 +6,4 @@ from models import Questionnaire
 class QuestForm(ModelForm):
 	class Meta:
 		model=Questionnaire
-		fields=('title', 'subject', 'description')
+		fields=['title', 'subject', 'description']

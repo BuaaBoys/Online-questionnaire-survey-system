@@ -13,22 +13,14 @@ from models import Questionnaire
 from form import QuestForm
 
 def show_quest_fill_page(request):
-	form = QuestForm()
-	return render(request, "4.html", {form:form, })
+	return render(request, "investmanager/4.html", {})
 
 def publish(request):
 	'''pass basic infomation to next page
 
 	when the button is pressed, the arguments will be passed.'''
 
-	if request.method == "POST":
-		#form = QuestForm()
-		if form.valid():
-			f_title = form.cleaned_data["title"]
-			f_subject = form.cleaned_data["subject"]
-			f_description = form.cleaned_data["subject"]
-			current_author = request.user
-			questionnaire = Questionnaire(title=f_title, subject=f_subject, description=f_description, author=current_author, date=datetime.datetime.now(), closed=False)
-			questionnaire.save()
-			# this place manage the content to xml conversion, use the id which database automatic generate
+	form = QuestForm(request.POST)
+	form.save()
+	# this place manage the content to xml conversion, use the id which database automatic generate
 	return HttpResponseRedirect("/")

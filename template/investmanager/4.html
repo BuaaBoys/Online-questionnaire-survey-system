@@ -5,14 +5,14 @@
 	<title>添加问卷基本信息</title>
 </head>
 <body>
-	<form action="" method="post">{% csrf_token %}
-		问卷标题：
+	<form action="publish" method="post">{% csrf_token %}
+		<label>问卷标题：</label>
 		<input type="text" name="title">
 		<br>
-		调查对象：
+		<label>调查对象：</label>
 		<input type="text" name="subject">
 		<br>
-		问卷描述：
+		<label>问卷描述：</label>
 		<textarea name="description" id="" cols="30" rows="10"></textarea>
 		<br>
 		<!--table>

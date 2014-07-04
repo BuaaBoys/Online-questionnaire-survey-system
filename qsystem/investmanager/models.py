@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from accounts.models import User
 
@@ -9,6 +10,6 @@ class Questionnaire(models.Model):
 	title = models.CharField(max_length=255)
 	subject = models.CharField(max_length=255)
 	description = models.TextField(max_length=255)
-	author = models.ForeignKey(User, related_name='Investigator')
-	date = models.DateTimeField()
-	closed = models.BooleanField()
+	#author = models.ForeignKey(User, related_name='Investigator')
+	date = models.DateTimeField(auto_now_add=True)
+	closed = models.BooleanField(default=False)

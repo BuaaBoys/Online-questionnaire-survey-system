@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from accounts import views
+from accounts.views import register
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -16,5 +16,6 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
 
-    url(r'^accounts/register/', views.register, name = 'register')
+    url(r'^accounts/register/', register, name = 'register'),
+    url(r'^quest/', include('investmanager.urls')),
 )
