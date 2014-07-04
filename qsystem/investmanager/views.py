@@ -32,7 +32,7 @@ def publish(request):
 =======
 		quest = form.save()
                 try:
-                        questions = Questions(qid=str(quest.id))
+                        questions = Questions(qid=str(quest.id), qs=[])
                         questionTitles = request.POST.getlist('question')
                         questionTypes = request.POST.getlist('type')
                         # 根据post的信息构造Question，将Question加入Questions
