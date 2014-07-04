@@ -8,28 +8,23 @@
 <body>
 	<form id="upload" name="quest" action="publish" method="post" onSubmit="return checkValid()">{% csrf_token %}
 		<label>问卷标题：</label>
-		<input type="text" name="title" maxlength="255">
-		<br>
+		<input type="text" name="title" maxlength="255"><br>
 		<label>调查对象：</label>
-		<input type="text" name="subject" maxlength="255">
-		<br>
+		<input type="text" name="subject" maxlength="255"><br>
 		<label>问卷描述：</label>
-		<textarea name="description" id="" cols="30" rows="10"></textarea>
-		<br>
+		<textarea name="description" id="" cols="30" rows="10"></textarea><br>
 		<div id="addQuestion">
 			<label>问题类型：</label>
-			<select name="type" id="select">
-			<option value="single" selected="selected">单选题</option>
-			<option value="multply">多选题</option>
-			<option value="judge">判断题</option>
-			<option value="essay">简答题</option>
+			<select id="select">
+				<option value="single" selected="selected">单选题</option>
+				<option value="multiply">多选题</option>
+				<option value="judge">判断题</option>
+				<option value="essay">简答题</option>
 			</select>
-			<button type="button" onclick="addQuestion()">添加</button>
+			<input type="button" value="添加" onclick="addQuestion()">
 		</div>
 		<input type="submit" value="发布问卷">
 	</form>
 	<p>{{ id }}</p>
-	
-	
 </body>
 </html>
