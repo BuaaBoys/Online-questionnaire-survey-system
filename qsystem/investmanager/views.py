@@ -15,7 +15,7 @@ from form import QuestForm
 def show_quest_fill_page(request):
 	'''let investigator create the questionnaire'''
 
-	return render_to_response("investmanager/4.html", {})
+	return render_to_response("investmanager/4_5.html", {})
 
 
 def publish(request):
