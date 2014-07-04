@@ -11,6 +11,7 @@ from accounts.models import User
 
 from models import Questionnaire
 from form import QuestForm
+from questions import *
 
 def show_quest_fill_page(request):
 	'''let investigator create the questionnaire'''
@@ -25,10 +26,32 @@ def publish(request):
 
 	form = QuestForm(request.POST)
 	if form.is_valid():
+<<<<<<< HEAD
 		quest = form.save(request)
 
+=======
+		quest = form.save()
+                try:
+                        questions = Questions(qid=str(quest.id))
+                        questionTitles = request.POST.getlist('question')
+                        questionTypes = request.POST.getlist('type')
+                        # 根据post的信息构造Question，将Question加入Questions
+                        # 太丑了救命
+                        for i, qtitle in enumerate(questionTitles):
+                                qtype = questionTypes[i]
+                                qitems = []
+                                if qtype == "single" or qtype == "multiply":
+                                        value = 'items' + str(i)
+                                        qitems = request.POST.getlist(value)
+                                        print qtitle, qtype, qitems
+                                        question = Question(qtype, qtitle, qitems)
+                                        questions.addQuestion(question)
+                        questions.write()
+                except Exception, e:
+                        print e
+>>>>>>> get questions|saved as .xml file
 		# this place manage the content to xml conversion, use the id which database automatic generate
-		return HttpResponseRedirect(str(quest.id))
+                return HttpResponseRedirect(str(quest.id))
 
 
 def quest(request, no):
