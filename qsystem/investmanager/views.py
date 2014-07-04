@@ -25,7 +25,7 @@ def publish(request):
 
 	form = QuestForm(request.POST)
 	if form.is_valid():
-		quest = form.save()
+		quest = form.save(request)
 
 		# this place manage the content to xml conversion, use the id which database automatic generate
 		return HttpResponseRedirect(str(quest.id))
