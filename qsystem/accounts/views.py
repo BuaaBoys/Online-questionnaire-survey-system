@@ -37,4 +37,3 @@ def login_submit(request):
 		return render(request, "accounts/login.html", {"error_msg":error_msg, "is_error":is_error})
 	if user.password == request.POST['password']:
 		pass
->>>>>>> master
