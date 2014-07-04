@@ -80,8 +80,6 @@ STATICFILES_DIRS = (
     ("images", os.path.join(STATIC_ROOT,'images')),
 )
 
-print STATICFILES_DIRS
-
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
