@@ -1,23 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-	<link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet"/>
-    <script src="{{ STATIC_URL }}js/jquery.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
-	<script type="text/javascript">
-		function submit(button) {
-			var time = new Date();
-			var date = time.getFullYear() + "/" + time.getMonth() + "/" + time.getDate();
-			document.getElementsByName("register_date")[0].val(date);
-			document.getElementsByTagName('form')[0].submit();
-		}
-	</script>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %}Sign In{% endblock %}
+{% block content %}
 	<div class="container">
 		<div class="row">
-			<div class="col-md-3"></div>
-			<div class="col-md-6">
+			<div class="col-md-4"></div>
+			<div class="col-md-4">
 				<form role="form" action="{% url 'register_submit' %}" method="POST">
 					{% csrf_token %}
 					<div class="form-group">
@@ -60,12 +47,9 @@
 					<button class="btn btn-primary" onlick="javascript:submit()">Submit</button>
 				</form>
 			</div>
-			<div class="col-md-3"></div>
+			<div class="col-md-4"></div>
 		</div>
 	</div>
-	<p>{{ li1 }}</p>
-	<p>{{ li2 }}</p>
-</body>
-
+{% endblock %}
 
 

@@ -1,16 +1,27 @@
-<<!DOCTYPE html>
-<html>
-<head>
-	<title></title>
-</head>
-<body>
-	<div>
-		<form method="post">
-			<label>UserName</label>
-			<input type="text" name="email" id="name" />
-			<input type="password" name="pw" id="pw" />
-			<input type="submit" name="login">
-		</form>
+{% extends 'base.html' %}
+{% block title %}Log In{% endblock %}
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-4"></div>
+		<div class="col-md-4">
+			<form role="form" method="post" action="{% url 'login_submit' %}">
+				{% csrf_token %}
+				<div class="form-group">
+					<label for="InputEmail1">Email address</label>
+					<input type="email" class="form-control" name="email" placeholder="Enter email" max="50" required>
+				</div>
+				<div class="form-group">
+					<label for="InputPassword1">Password</label>
+					<input type="password" class="form-control" name="password" placeholder="Password: 5-20 Letters or numbers" required pattern="^[a-zA-Z0-9-_\.]{5,12}$" maxlength="20">
+				</div>
+				<button class="btn btn-primary" onlick="javascript:submit()">Login</button>
+				<div class="form-group">
+					<div class="alert alert-danger alert-dismissible" {{ is_error }} role="alert">{{ error_msg }}</div>
+				</div>
+			</form>
+		</div>
+		<div class="col-md-4"></div>
 	</div>
-</body>
-</html>
+</div
+{% endblock %}
