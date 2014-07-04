@@ -133,6 +133,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'accounts',
 	'investmanager',
+    'results',
 )
 
 # A sample logging configuration. The only tangible logging

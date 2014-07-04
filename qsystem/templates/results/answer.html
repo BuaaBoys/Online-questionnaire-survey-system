@@ -1,0 +1,89 @@
+<html>
+	<head>
+		<link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet"/>
+    	<script src="{{ STATIC_URL }}js/jquery.js"></script>
+    	<script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+	</head>
+	<body>
+		<div class="container">
+		<div class="row">
+		<div class="col-md-2"></div>
+		<div class="col-md-8">
+		<div>
+			<div>
+				<h1>
+					{{Questionnaire.title}}
+					{{qid}}
+				</h1>
+				<legend></legend>
+				<div>
+				<blockquote>
+					<p>
+					<small>
+						{{Questionnaire.description}}
+					</small>
+					</p>
+				</blockquote>
+					<div>
+						{% if errorMsg %}
+						    <div class="alert">
+						    <button type="button" class="close" data-dismiss="alert">&times;</button>
+						    <strong>Warning!</strong>{{ errorMsg }}
+						    </div>
+						{% endif %}
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<form role="form" action="{%url 'results.views.publish' qid%} " method="post">
+			</fieldset>
+			{% csrf_token %}
+			{% for q in naire.questionList %}
+				<div class="form-group">
+					<legend>
+					<label>
+						{{q.qid}}:
+						{{q.content}}
+					</label>
+					</legend>
+					{% if q.qtype == 'single'%}
+					{% for i in q.items %}
+						<input type="radio" name="{{q.qid}}" id="choice{{forloop.counter}}" value="{{forloop.counter}}" autofocus="autofocus"/>
+						<label for="choice{{forloop.counter}}">
+							{{i}}
+						</label>
+					{% endfor %}
+					{% endif %}
+					{%if q.qtype == 'multiply'%}
+					{% for i in q.items %}
+						<input type="checkbox" name="{{q.qid}}" id="choice{{forloop.counter}}" value="{{forloop.counter}}" autofocus="autofocus"/>
+						<label for="choice{{forloop.counter}}">
+							{{i}}
+						</label>
+					{% endfor %}
+					{% endif %}
+					{%if q.qtype == 'truefalse'%}
+						<input type="radio" name="{{q.qid}}" id="choice1" value="1" autofocus="autofocus"/>
+						<label for="1">
+							true
+						</label>
+						<input type="radio" name="{{q.qid}}" id="choice2" value="2" autofocus="autofocus"/>
+						<label for="2">
+							false
+						</label>
+					{% endif %}
+					{%if q.qtype == 'essay'%}
+						<input type="text" name="{{q.qid}}" id="choice{{forloop.counter}}" autofocus="autofocus"/>
+					{% endif %}
+				</div>
+			{% endfor%}
+			</fieldset>
+			<legend></legend>
+			<button type="submit" class="btn btn-primary">Finish</button>
+		</form>
+		</div>
+		</div>
+		</div>
+	</body>
+</html>
