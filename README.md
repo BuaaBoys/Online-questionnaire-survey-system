@@ -53,16 +53,24 @@ Online-questionnaire-survey-system
 
         git branch -d story-42
 
+## 其他流程
 
-注：可自行选择是否将story分支push到origin repo以作备份只用，但请及时清理过期的分支。创建远程分支：
+可自行选择是否将story分支push到origin repo以作备份只用，但请及时清理过期的分支。
+
+* 创建远程分支：
 
         git push origin story-42:story-42
         
-更新远程分支：
+* 更新远程分支：
 
         git push origin story-42
         
-删除远程分支：
+* 删除远程分支：
 
         git push origin :story-42
+        
+* 获取不在本地的远程分支：
+
+        git fetch
+        git checkout -b local-story-24 origin/remote-story-24
         
