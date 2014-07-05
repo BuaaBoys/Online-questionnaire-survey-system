@@ -70,14 +70,13 @@ function addQuestion() {
 	question.appendChild(type);
     question.appendChild(para);
     question.appendChild(describe);
-    container.appendChild(delQue);
+    question.appendChild(delQue);
 	if (question.id == "single" || question.id == "multiply") {
-		container.appendChild(inc);
-		container.appendChild(del);
+		question.appendChild(inc);
+		question.appendChild(del);
 		addItem(inc);
 		addItem(inc);
 	}
-	question.appendChild(container);
     //appendNewLine(question);
     
     var submit = document.getElementById("addQuestion");
@@ -94,24 +93,24 @@ function deleteQuestion(obj) {
     parent.removeChild(obj.parentNode);
     var questions = document.getElementsByClassName("question");
     for (var i=0; i<questions.length; ++i) {
-	var question = questions[i];
-	var type = "";
-	switch (question.id) {
-	case "single":
-	    type = "单选题";
-	    break;
-	case "multiply":
-	    type = "多选题";
-	    break;
-	case "judge":
-	    type = "判断题";
-	    break;
-	case "essay":
-	    type = "简答题";
-	    break;
-	}
-	var para = question.getElementsByTagName("p")[0];
-	para.textContent = (i + 1) + '.' + type;
+		var question = questions[i];
+		var type = "";
+		switch (question.id) {
+		case "single":
+			type = "单选题";
+			break;
+		case "multiply":
+			type = "多选题";
+			break;
+		case "judge":
+			type = "判断题";
+			break;
+		case "essay":
+			type = "简答题";
+			break;
+		}
+		var para = question.getElementsByTagName("p")[0];
+		para.textContent = (i + 1) + '.' + type;
     }
 }
 

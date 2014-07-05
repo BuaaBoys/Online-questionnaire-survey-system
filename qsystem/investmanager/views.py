@@ -12,6 +12,10 @@ from accounts.models import User
 from models import Questionnaire
 from form import QuestForm
 from questions import *
+import sys 
+
+reload(sys) 
+sys.setdefaultencoding('utf8')
 
 def show_quest_fill_page(request):
 	'''let investigator create the questionnaire'''
@@ -24,6 +28,7 @@ def publish(request):
 
 	when the button is pressed, the arguments will be passed.'''
 
+	print request.POST
 	form = QuestForm(request.POST)
 	if form.is_valid():
 		quest = form.save(request)
