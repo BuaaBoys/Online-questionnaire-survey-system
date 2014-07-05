@@ -133,6 +133,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'accounts',
 	'investmanager',
+    'results',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -165,7 +166,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': './log/debug.log',
+            'filename': './debug.log',
         },
         'console':{
             'level': 'DEBUG',

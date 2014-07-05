@@ -3,3 +3,5 @@
 *.pyc
 
 qsystem/admindb
+
+qsystem/debug.log
