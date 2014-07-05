@@ -1,10 +1,6 @@
-<html>
-	<head>
-		<link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet"/>
-    	<script src="{{ STATIC_URL }}js/jquery.js"></script>
-    	<script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
-	</head>
-	<body>
+{% extends 'base.html' %}
+{% block title %}回答问卷{% endblock %}
+{% block body %}
 		<div class="container">
 		<div class="row">
 		<div class="col-md-2"></div>
@@ -63,7 +59,7 @@
 						</label>
 					{% endfor %}
 					{% endif %}
-					{%if q.qtype == 'truefalse'%}
+					{%if q.qtype == 'judge'%}
 						<input type="radio" name="{{q.qid}}" id="choice1" value="1" autofocus="autofocus"/>
 						<label for="1">
 							true
@@ -85,5 +81,4 @@
 		</div>
 		</div>
 		</div>
-	</body>
-</html>
+{% endblock %}

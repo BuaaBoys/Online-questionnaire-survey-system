@@ -38,7 +38,7 @@ def publish(request, qid):
 					m += r + ','
 				m += '],'
 				result += m
-			elif Naire.questionList[x-1].qtype == 'truefalse':
+			elif Naire.questionList[x-1].qtype == 'judge':
 				result += request.POST[str(x)] + ','
 			elif Naire.questionList[x-1].qtype == 'essay':
 				result += request.POST[str(x)] + ','

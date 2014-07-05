@@ -74,14 +74,17 @@ function addQuestion() {
 	if (question.id == "single" || question.id == "multiply") {
 		question.appendChild(inc);
 		question.appendChild(del);
-		addItem(inc);
-		addItem(inc);
 	}
     //appendNewLine(question);
     
     var submit = document.getElementById("addQuestion");
     
     parent.insertBefore(question, submit);
+
+    if (question.id == "single" || question.id == "multiply") {
+		addItem(inc);
+		addItem(inc);
+	}
 }
 
 function deleteQuestion(obj) {
@@ -136,7 +139,7 @@ function addItem(obj) {
     label.textContent = "选项" + (no + 1) + '.';
     text.setAttribute("type", "text");
 	text.setAttribute("class", "form-control");
-	var index = document.getElementsByClassName("question").length;
+	var index = document.getElementsByClassName("question").length - 1;
     text.setAttribute("name", "items" + index);
     item.appendChild(choose);
     item.appendChild(label);
