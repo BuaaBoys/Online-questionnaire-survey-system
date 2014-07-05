@@ -6,4 +6,4 @@ qsystem/admindb
 
 qsystem/debug.log
 
-data/*
+qsystem/data/*
