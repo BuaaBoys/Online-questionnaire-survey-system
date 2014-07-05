@@ -4,6 +4,7 @@ from accounts.models import User, UserForm
 from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
+import urllib
 
 def register(request):
 	is_error = "hidden"
@@ -38,7 +39,8 @@ def login_submit(request):
 		return render(request, "accounts/login.html", {"error_msg":error_msg, "is_error":is_error})
 	if user.password == request.POST['password']:
 		response = HttpResponseRedirect(reverse('login', args=()))
-		response.set_cookie('email', user.email, 3600)
+		tmp_email = urllib.quote_plus(user.email)
+		response.set_cookie('email', tmp_email, 3600)
 		return response
 	else:
 		is_error = ""

@@ -17,5 +17,4 @@ class QuestForm(ModelForm):
 		current_user_email = request.COOKIES.get("email")
 		current_user = User.objects.get(email=current_user_email)
 		author = current_user
-
 		return Questionnaire.objects.create(title=title, subject=subject, description=description, author=author)
