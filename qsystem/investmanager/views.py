@@ -19,7 +19,6 @@ sys.setdefaultencoding('utf8')
 
 def show_quest_fill_page(request):
 	'''let investigator create the questionnaire'''
-
 	#return render_to_response("investmanager/4_5.html", {})
 	return render(request, "investmanager/4_5.html", {})
 
