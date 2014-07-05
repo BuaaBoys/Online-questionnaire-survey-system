@@ -39,7 +39,8 @@ def login_submit(request):
 		return render(request, "accounts/login.html", {"error_msg":error_msg, "is_error":is_error})
 	if user.password == request.POST['password']:
 		response = HttpResponseRedirect(reverse('login', args=()))
-		tmp_email = urllib.quote_plus(user.email)
+		# tmp_email = urllib.quote_plus(user.email)
+		tmp_email = user.email
 		response.set_cookie('email', tmp_email, 3600)
 		return response
 	else:

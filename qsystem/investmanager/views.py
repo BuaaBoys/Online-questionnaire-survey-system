@@ -25,6 +25,7 @@ def publish(request):
 
 	form = QuestForm(request.POST)
 	if form.is_valid():
+		request.COOKIES.get("email")
 		quest = form.save(request)
 
 		# this place manage the content to xml conversion, use the id which database automatic generate
