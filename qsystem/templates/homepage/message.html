@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Message{% endblock %}
+{% block body %}
+<div class="container">
+	<div class="alert alert-{{ message.alert_type }}" role="alert">
+		<strong>{{ message.message_strong }}</strong>{{ message.message_content }}
+		<br>
+		You will be redirected to homepage in <span id="totalSecond">5</span> seconds.
+	</div>
+
+</div>
+<script language="javascript" type="text/javascript">
+	var second=document.getElementById('totalSecond').textContent;
+
+	if (navigator.appName.indexOf("Explorer")>-1){
+		second=document.getElementById('totalSecond').innerText;
+	} else {
+		second=document.getElementById('totalSecond').textContent;
+	}
+
+	setInterval("redirect()", 1000);
+
+	function redirect(){
+		if (second<1){
+			location.href="{{ message.redirect_target }}";
+		} else {
+			if (navigator.appName.indexOf("Explorer")>-1){
+				document.getElementById('totalSecond').innerText=second--;
+			} else {
+				document.getElementById('totalSecond').textContent=second--;
+			}
+		}
+	}
+</script>
+{% endblock %}

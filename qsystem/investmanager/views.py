@@ -6,6 +6,7 @@ include TODO and publish'''
 import datetime
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import render,render_to_response
+from django.template import loader, RequestContext
 
 from accounts.models import User
 
@@ -20,7 +21,15 @@ sys.setdefaultencoding('utf8')
 def show_quest_fill_page(request):
 	'''let investigator create the questionnaire'''
 	#return render_to_response("investmanager/4_5.html", {})
+	p(request, "investmanager/4_5.html", {'a':'a'})
 	return render(request, "investmanager/4_5.html", {})
+
+def p(request, *args, **kwargs):
+	print kwargs.get('status', None)
+	print kwargs.get('content_type', None)
+	print kwargs.get('context_instance', None)
+	context_instance = RequestContext(request, current_app='investigator')
+	print context_instance
 
 def publish(request):
 	'''pass basic infomation to next page

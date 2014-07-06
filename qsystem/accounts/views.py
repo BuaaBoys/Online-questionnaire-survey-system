@@ -38,7 +38,7 @@ def login_submit(request):
 		error_msg = "E-mail does not exist"
 		return render(request, "accounts/login.html", {"error_msg":error_msg, "is_error":is_error})
 	if user.password == request.POST['password']:
-		response = HttpResponseRedirect("/")
+		response = HttpResponseRedirect("/message/loggedin")
 		# tmp_email = urllib.quote_plus(user.email)
 		tmp_email = user.email
 		response.set_cookie('email', tmp_email, 3600)
