@@ -3,17 +3,62 @@
 {% block body %}
 	<div class="container">
 	<div class="row">
-	<div class="col-md-4"></div>
-	<div class="col-md-4">
-	<!--<h1>{{result.2.0}}</h1>-->
+	
+	<div class="col-md-12">
+		<div>
+		<div>
+		<ul class="nav nav-tabs" role="tablist">
+			<li class="active">
+				<a class="navbar-link" role="tab" data-toggle="tab" href="#index">基本信息</a>
+			</li>
 		{% for i in result %}
-			<div>
-			{% for t in i %}
-				<div>{{t}}</div>
-			{% endfor %}
+	        <li>
+	        	<a class="navbar-link" role="tab" data-toggle="tab" href="#result{{forloop.counter}}">{{forloop.counter}}</a>
+	        </li>
+	    {% endfor %}
+	    </ul>
+	    </div>
+	    </div>
+	    <p></p>
+	    <p></p>
+	    <div></div>
+		<div class="tab-content">
+			<div id="index" class="tab-pane active" >
+				This is index!
+			</div>
+		{% for i in result %}
+			<div id="result{{forloop.counter}}" class="tab-pane">
+			<div class="col-md-3 table-responsive bs-example">
+				<table class="table table-striped">
+					<tr>
+						<th>choice</th>
+						<th>count</th>
+					</tr>
+					{% for t in i %}
+					<tr>
+						<td>{{forloop.counter}}</td>
+						<td>{{t}}</td>
+					</tr>
+					{% endfor %}
+				</table>
+			</div>
+			<div class="col-md-9">
+				
+			</div>
 			</div>
 		{% endfor %}
+		</div>
 	</div>
 	</div>
 	</div>
+	<script type="text/javascript">
+		$(function () {
+    		$('#myTab a:last').tab('show')
+  		})
+  		$('.dropdown-toggle').dropdown()
+  		$('#myTab a').click(function (e) {
+			.preventDefault()
+			$(this).tab('show')
+		})
+	</script>
 {% endblock %}

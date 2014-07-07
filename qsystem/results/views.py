@@ -1,11 +1,10 @@
-from django.shortcuts import render,get_object_or_404,render_to_response
-from django.http import HttpResponse,HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from results.models import Result
+from django.http import HttpResponse,HttpResponseRedirect
+from django.shortcuts import render,get_object_or_404,render_to_response
 from investmanager.models import Questionnaire 
-import xml.dom.minidom
-from results.questions.questions import Questions
 from qsystem.views import AlertMessage
+from results.models import Result
+from results.questions.questions import Questions
 
 
 def answer(request, qid):
@@ -51,7 +50,7 @@ def publish(request, qid):
 		r = Result(questionnaire_id=qid,participant_id=user,answer=str(result))
 		print str(result)
 		r.save()
-		return render(request, "homepage/message.html", {"message": AlertMessage("success", "Success!", "You are logged out now.", "/"),})
+		return render(request, "homepage/message.html", {"message": AlertMessage("success", "Success!", "You have already posted your answers", "/naire"+str(qid)+"/results"),})
 	except:
 		q = get_object_or_404(Questionnaire, pk=qid)
 		Naire = Questions()
@@ -61,7 +60,7 @@ def publish(request, qid):
 		return render(request, 'results/answer.html',{'Questionnaire':q ,'naire':Naire ,'qid':qid, 'errorMsg':'Not finished yet!'})	
 		
 def success(request):
-	return render(request, "homepage/message.html", {"message": AlertMessage("success", "Success!", "You are logged out now.", "/"),})
+	return render(request, "homepage/message.html", {"message": AlertMessage("success", "Success!", "You have already posted your answers", "/results/results"),})
 
 def error404(request):
 	return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "xxxx", "/"),})
@@ -72,7 +71,37 @@ def result(request, qid):
 	Naire.qid = qid
 	Naire.read()
 	q = get_object_or_404(Questionnaire, pk=qid)
-	rt = get_object_or_404(Result, questionnaire_id=qid, participant_id="anonymity@admin.com")
-	r = eval(rt.answer)
-	print r
-	return render(request, 'results/results.html' ,{'Questionnaire':q ,'naire':Naire ,'qid':qid ,'result':r})
+	rts = Result.objects.filter(questionnaire_id=qid)
+	
+	# Start doing data collection
+	# Dataset init
+	dataset = []
+	for x in xrange(1,Naire.count+1):
+		if Naire.questionList[x-1].qtype == 'single':
+			choice_set = []
+			for x in xrange(0,len(Naire.questionList[x-1].items)):
+				choice_set.append(0)
+			dataset.append(choice_set)
+		elif Naire.questionList[x-1].qtype == 'multiply':
+			choice_set = []
+			for x in xrange(0,len(Naire.questionList[x-1].items)):
+				choice_set.append(0)
+			dataset.append(choice_set)
+		elif Naire.questionList[x-1].qtype == 'judge':
+			choice_set = [ 0 , 0 ]
+			dataset.append(choice_set)
+		elif Naire.questionList[x-1].qtype == 'essay':
+			dataset.append([])
+
+	print dataset
+	# ergodic
+	for x in rts:
+		simple_sheet = eval(x.answer)
+		list_count = 0
+		for l in simple_sheet:
+			if Naire.questionList[list_count].qtype != 'essay':
+				for i in l:
+					dataset[list_count][int(i)-1] += 1
+			list_count += 1
+	print dataset
+	return render(request, 'results/results.html' ,{'Questionnaire':q ,'naire':Naire ,'qid':qid ,'result':dataset})
