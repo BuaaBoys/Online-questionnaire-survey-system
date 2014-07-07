@@ -12,5 +12,5 @@ def custom_auth(request):
 	else:
 		user_context = {"email" : "", "login" : 'false'}
 	return {
-		'user' : user_context,
+		'custom_user' : user_context,
 	}
