@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}添加问卷{% endblock %}
+{% block title %}Add Questionnaire{% endblock %}
 {% block body %}
 <div class="container">
 	<div class="page-header">
@@ -7,8 +7,16 @@
 	</div>
 	<div class="jumbotron">
   		<h1>Welcome to QSystem,</h1>
-  		<p>start a qustionnaire</p>
-  		<p><a class="btn btn-primary btn-lg" href="/quest/" role="button">Click Me</a></p>
+  		<div class="row">
+  			<div class="span4">
+  				<p>start a qustionnaire</p>
+  				<p><a class="btn btn-primary btn-lg" href="/quest/" role="button">Click Me</a></p>
+  			</div>
+  			<div class="span4">
+  				<p>manage qustionnaires</p>
+  				<p><a class="btn btn-primary btn-lg" href="/quest/manage" role="button">Click Me</a></p>
+			</div>
+		</div>
 	</div>
 </div>
 {% endblock %}

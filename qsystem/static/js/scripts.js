@@ -176,3 +176,54 @@ function appendNewLine(obj) {
     obj.appendChild(document.createElement("br"));
 }
 
+function select_all(thisform)
+{
+	var inputs = thisform.getElementsByClassName("quest_checkbox");
+
+	if(inputs[0].checked == true)		
+		for(var i=1;i<inputs.length;i++)
+		{
+			if (inputs[i].getAttribute("type")=="checkbox")
+			{
+				inputs[i].checked = true;
+			}
+
+		}
+	else 
+		for(var i=1;i<inputs.length;i++)
+		{
+			if (inputs[i].getAttribute("type")=="checkbox")
+			{
+				inputs[i].checked = false;
+			}
+
+		}
+	return 0;
+}
+
+function pass_selects(thisform)
+{
+
+	var inputs = thisform.getElementsByClassName("quest_checkbox");
+	var selects = new String("");
+		for(var i=1;i<inputs.length;i++)
+		{
+			if (inputs[i].getAttribute("type")=="checkbox" && inputs[i].checked == true)
+			{
+				var id  = inputs[i].getAttribute("id");
+
+				selects =selects + id + ",";
+				
+				
+			}
+
+		}
+
+	var true_selects = document.getElementById("hide_check");
+	
+	true_selects.value = selects;
+	
+	alert(selects);
+
+	return true;
+}

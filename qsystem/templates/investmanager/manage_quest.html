@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Add Questionnaire{% endblock %}
+{% block body %}
+<div class="container">
+	<script src="{{ STATIC_URL }}js/scripts.js"></script>
+	<form method = "POST" target = "_self" onsubmit="return pass_selects(this);">	
+		
+		<input type="hidden"  name="hide_check" id="hide_check"   value =""/>
+		<input type = "submit" name = "Reopen" value = "Reopen"></input>
+		<input type = "submit" name = "Close" value = "Close"></input>
+		<table  border = "1">
+			<tr>
+				<th>
+					<input type = "checkbox" class= "quest_checkbox" onclick = "select_all(this.form);" value = ""></input>
+				</th>
+				<th>ID</th>
+				<th>Title</th>
+				<th>Status</th>
+			</tr>
+			{% for item in quest_list %}
+			<tr>
+				
+				<th>
+					<input name="{{ item.id }}" type = "checkbox" id= "{{ item.id }}" class = "quest_checkbox" >
+				</th>
+				<th>{{ item.id }}</th>
+				<th>{{ item.title }}</th>
+				{% if item.closed %}
+					<th>Closed</th>
+					
+				{% else %}
+					<th>Opened</th>
+					
+				{% endif %}
+			</tr>
+			{% endfor %}
+		</table>
+		<p>{{ printed }}</p>
+		
+	</form>
+</div>
+{% endblock %}

@@ -14,9 +14,9 @@ from accounts.models import User
 from models import Questionnaire
 from form import QuestForm
 from results.questions.questions import Question, Questions
-import sys 
+import sys
 
-reload(sys) 
+reload(sys)
 sys.setdefaultencoding('utf8')
 
 def show_quest_fill_page(request):
@@ -25,7 +25,7 @@ def show_quest_fill_page(request):
 	print auth.is_login()
 	if not auth.is_login():
 		return HttpResponseRedirect("/message/loginfirst")
-	return render(request, "investmanager/4_5.html", {})
+	return render(request, "investmanager/add_quest.html", {})
 
 def publish(request):
 	'''pass basic infomation to next page
@@ -76,3 +76,18 @@ def quest(request, no):
 	description = quest.description
 
 	return render(request, "investmanager/show_quest.html",{'id':id, "title":title, "subject":subject, "description":description,})
+
+def manage(request):
+	'''go to the quest_manage page'''
+
+	printed = request.POST
+
+	quest_list = Questionnaire.objects.all()
+	return render(request, "investmanager/manage_quest.html", {'quest_list':quest_list, 'printed':request.POST})
+
+def reopen(request):
+	'''reopen the closed questionnaire'''
+
+	printed = request.POST
+
+	return render(request, "investmanager/manage_quest.html", {'quest_list':NULL, 'printed':request.POST})
