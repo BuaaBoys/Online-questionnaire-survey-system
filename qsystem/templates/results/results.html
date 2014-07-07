@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}问卷结果{% endblock %}
+{% block body %}
+	<div class="container">
+	<div class="row">
+	<div class="col-md-4"></div>
+	<div class="col-md-4">
+	<!--<h1>{{result.2.0}}</h1>-->
+		{% for i in result %}
+			<div>
+			{% for t in i %}
+				<div>{{t}}</div>
+			{% endfor %}
+			</div>
+		{% endfor %}
+	</div>
+	</div>
+	</div>
+{% endblock %}
