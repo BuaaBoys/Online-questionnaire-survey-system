@@ -8,6 +8,8 @@ def message(request, msg):
 		message = AlertMessage("success", "Success!", "You are logged in now.", "/")
 	if msg == "loggedout":
 		message = AlertMessage("success", "Success!", "You are logged out now.", "/")
+	if msg == "registered":
+		message = AlertMessage("success", "Success!", "You are signed up, log in and see what you can do.", "/accounts/login")
 	return render(request, "homepage/message.html", {"message": message,})
 
 
