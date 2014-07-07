@@ -8,14 +8,18 @@ from models import Questionnaire
 class QuestForm(ModelForm):
 	class Meta:
 		model=Questionnaire
-		fields=('title', 'subject', 'description',)
+		fields=('title', 'subject', 'description')
+
+	def __init__(self, post, questions):
+		ModelForm.__init__(self, post)
+		self.questions = questions
 
 	def save(self, request):
 		title = self.cleaned_data['title']
 		subject = self.cleaned_data['subject']
 		description = self.cleaned_data['description']
 		current_user_email = request.COOKIES.get("email").decode('utf8')
-		print current_user_email
+		contents = self.questions.build()
 		current_user = User.objects.get(email=current_user_email)
 		author = current_user
-		return Questionnaire.objects.create(title=title, subject=subject, description=description, author=author)
+		return Questionnaire.objects.create(title=title, subject=subject, description=description, contents=contents, author=author)
