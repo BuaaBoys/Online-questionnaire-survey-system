@@ -13,14 +13,17 @@
     <script type="text/javascript">
         function logout(){
             docCookies.removeItem('email','/');
-            document.location = "/accounts/login/"
+            document.location = "/message/loggedout"
+        }
+        function redirect_to_quest(){
+            document.getElementsByTagName('form')[0].submit();
         }
     </script>
     <title>{% block title %}{% endblock %}</title>
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">Home</a>
+                <a class="navbar-brand" href="/">Home</a>
             </div>
             <div class="navbar-collapse collapse">
                 <script type="text/javascript">
@@ -33,14 +36,20 @@
                     }
                     else{
                         document.write("<ul class=\"nav navbar-nav navbar-right\">");
-                        document.write("<li><a href=\"/accounts/login/\">Login</a></li>");
-                        document.write("<li><a href=\"/accounts/register/\">Sign in</a></li>");
+                        document.write("<li><a href=\"/accounts/login/\">Sign in</a></li>");
+                        document.write("<li><a href=\"/accounts/register/\">Sign up</a></li>");
                         document.write("</ul>");
                     }
                 </script>
+                <ul class="nav navbar-nav">
+                    <li><a href="javascript:redirect_to_quest()">Design a questionnaire</a></li>
+                    <li><a href=""></a></li>
+                </ul>
             </div>
         </div>
     </nav>
+    <form name="cookies" method="POST" action="/quest/" type="hidden">
+    </form>
 </head>
 <body>
 {% block body %}{% endblock %}
