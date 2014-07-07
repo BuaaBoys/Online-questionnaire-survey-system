@@ -33,7 +33,7 @@ class Authentication():
 		If a request contians a user login infomation, return True
 		Else return False
 		"""
-		user = get_user
+		user = self.get_user()
 		if user == None:
 			return False
 		else:

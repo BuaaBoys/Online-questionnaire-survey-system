@@ -5,11 +5,13 @@ def home(request):
 	return render(request, "homepage/index.html")
 def message(request, msg):
 	if msg == "loggedin":
-		message = AlertMessage("success", "Success!", "You are logged in now.", "/")
+		message = AlertMessage("success", "Success!", " You are logged in now.", "/")
 	if msg == "loggedout":
-		message = AlertMessage("success", "Success!", "You are logged out now.", "/")
+		message = AlertMessage("success", "Success!", " You are logged out now.", "/")
 	if msg == "registered":
-		message = AlertMessage("success", "Success!", "You are signed up, log in and see what you can do.", "/accounts/login")
+		message = AlertMessage("success", "Success!", " You are signed up, log in and see what you can do.", "/accounts/login")
+	if msg == "loginfirst":
+		message = AlertMessage("info", "Please log in first.", " A questionnaire can only be created by a signed in user.", "/accounts/login")
 	return render(request, "homepage/message.html", {"message": message,})
 
 
