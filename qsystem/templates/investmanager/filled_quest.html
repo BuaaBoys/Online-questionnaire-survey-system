@@ -1,0 +1,23 @@
+{% extends 'quest_base.html' %}
+{% block title %}Filled Questionnaires{% endblock %}
+{% block content %}
+{% for item in filled_quest %}
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<div class="row">
+			<div class="col-lg-10">
+				<p>{{ item.1 }}</p>
+			</div>
+			<div class="col-lg-2">
+				<div class="col-md-6"></div>
+				<p class="text-right"><button type="button" class="btn btn-info btn-xs col-md-6">View</button></p>
+			</div>
+		</div>
+	</div>
+	<div class="panel-body">
+		<p>Subject: {{ item.2 }}</p>
+		<p>Description: {{ item.3 }}</p>
+	</div>
+</div>
+{% endfor %}
+{% endblock %}

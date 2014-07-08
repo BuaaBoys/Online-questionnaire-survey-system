@@ -8,4 +8,5 @@ urlpatterns = patterns('',
 		url(r'^publish$', views.publish),
 		url(r'^$', views.show_quest_fill_page),
 		url(r'^home$', views.manage_all),
+		url(r'^filled/(?P<page>\d{1,})$', views.manage_filled),
 		)
