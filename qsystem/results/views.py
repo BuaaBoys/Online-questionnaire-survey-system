@@ -21,7 +21,7 @@ def answer(request, qid):
 		return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "xxxx", "/"),})
 
 def publish(request, qid):
-	try:
+	#try:
 		Naire = Questions()
 		Naire.clean()
  		Naire.qid = qid
@@ -48,11 +48,13 @@ def publish(request, qid):
 		user = request.COOKIES.get("email")
 		if user == None:
 			user = "anonymity@admin.com"
-		r = Result(questionnaire_id=qid,participant_id=user,answer=str(result))
-		print str(result)
+		
+		Questionnaire_answered = Questionnaire.objects.get(pk=qid)
+		r = Result(questionnaire_id=Questionnaire_answered,participant_id=user,answer=str(result))
+		#print str(result)
 		r.save()
 		return render(request, "homepage/message.html", {"message": AlertMessage("success", "Success!", "You have already posted your answers", "/naire"+str(qid)+"/results"),})
-	except:
+	#except:
 		q = get_object_or_404(Questionnaire, pk=qid)
 		Naire = Questions()
 		Naire.clean()
