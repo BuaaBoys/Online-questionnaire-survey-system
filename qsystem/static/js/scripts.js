@@ -205,19 +205,6 @@ function pass_selects(thisform)
 {
 
 	var inputs = thisform.getElementsByClassName("quest_checkbox");
-	var selects = new String("");
-		for(var i=1;i<inputs.length;i++)
-		{
-			if (inputs[i].getAttribute("type")=="checkbox" && inputs[i].checked == true)
-			{
-				var id  = inputs[i].getAttribute("id");
-
-				selects =selects + id + ",";
-				
-				
-			}
-
-		}
 
 	var true_selects = document.getElementById("hide_check");
 	

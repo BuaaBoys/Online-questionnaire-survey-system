@@ -80,17 +80,31 @@ def quest(request, no):
 def manage(request):
 	'''go to the quest_manage page'''
 
-	printed = request.POST
+	auth = Authentication(request)
+	current_user = auth.get_user()
+	#current_email = user.email
 
-	quest_list = Questionnaire.objects.all()
-	return render(request, "investmanager/manage_quest.html", {'quest_list':quest_list, 'printed':request.POST})
+	quest_list = Questionnaire.objects.filter(author = current_user)
 
-def reopen(request):
-	'''reopen the closed questionnaire'''
+	if request.method == "GET":	
+		return render(request, "investmanager/manage_quest.html", {'quest_list':quest_list, })
+	else:
+		if request.POST.has_key("reopen"):
+			re = int(request.POST["reopen"])
+			quest = Questionnaire.objects.filter(id = re)[0]
+			quest.closed = False
+			quest.save()
+			
 
-	printed = request.POST
+		elif request.POST.has_key("close"):
+			re = int(request.POST["close"])
+			quest = Questionnaire.objects.filter(id = re)[0]
+			quest.closed = True
+			quest.save()
+			
 
-	return render(request, "investmanager/manage_quest.html", {'quest_list':NULL, 'printed':request.POST})
+		return render(request, "investmanager/manage_quest.html", {'quest_list':quest_list, })	
+
 
 def manage_all(request):
 

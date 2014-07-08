@@ -14,3 +14,4 @@ class Questionnaire(models.Model):
 	author = models.ForeignKey(User, related_name='Investigator')
 	date = models.DateTimeField(auto_now_add=True)
 	closed = models.BooleanField(default=False)
+	released = models.BooleanField(default=False)
