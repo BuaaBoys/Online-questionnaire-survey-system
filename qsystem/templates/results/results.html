@@ -24,11 +24,46 @@
 	    <div></div>
 		<div class="tab-content">
 			<div id="index" class="tab-pane active" >
-				This is index!
+				<div>
+				<h1>
+					{{Questionnaire.title}}
+					{{qid}}
+				</h1>
+				<legend></legend>
+				<div>
+				<blockquote>
+					<p>
+					<small>
+						{{Questionnaire.description}}
+					</small>
+					</p>
+				</blockquote>
+				<div>
+					<h3>{{count}}</h3>
+				</div>
+				</div>
+
+			</div>
 			</div>
 		{% for i in result %}
 			<div id="result{{forloop.counter}}" class="tab-pane">
-			<div class="col-md-3 table-responsive bs-example">
+			{% for q in naire.questionList %}
+			<!-- Judge if a essay question-->
+			{% if forloop.counter = forloop.parentloop.counter and q.qtype != 'essay'%}
+			<div class="col-md-4 table-responsive bs-example">
+				<div>
+					<div>
+					<div><h4>{{forloop.counter}}:{{q.content}}<h4></div>
+					<div>
+					{% for it in q.items %}
+						</br>
+						<label>{{forloop.counter}}: {{it}}</label>
+					{% endfor %}
+					</div>
+					</div>
+					<legend></legend>
+				</div>
+				{% if q.qtype != 'judge' %}
 				<table class="table table-striped">
 					<tr>
 						<th>choice</th>
@@ -37,14 +72,35 @@
 					{% for t in i %}
 					<tr>
 						<td>{{forloop.counter}}</td>
-						<td>{{t}}</td>
+						<td><strong>{{t}}</strong>&nbsp;({% widthratio t count 100 %}%)</td>
 					</tr>
 					{% endfor %}
 				</table>
+				{% endif %}
+				{% if q.qtype == 'judge' %}
+				<table class="table table-striped">
+					<tr>
+						<th>choice</th>
+						<th>count</th>
+					</tr>
+					<tr>
+						<td>True</td>
+						<td><strong>{{i.0}}</strong>&nbsp;({% widthratio i.0 count 100 %}%)</td>
+					</tr>
+					<tr>
+						<td>False</td>
+						<td><strong>{{i.1}}</strong>&nbsp;({% widthratio i.1 count 100 %}%)</td>
+					</tr>
+				</table>
+				{% endif %}
 			</div>
-			<div class="col-md-9">
-				
+			<div class="col-md-8">
+				<!--This division is for chart.js-->
 			</div>
+			{% endif %}
+			<!-- End of none Essay questions block-->
+			<!-- Start to handle with Essay questions-->
+			{% endfor %}
 			</div>
 		{% endfor %}
 		</div>

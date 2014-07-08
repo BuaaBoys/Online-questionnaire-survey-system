@@ -95,6 +95,7 @@ def result(request, qid):
 
 	print dataset
 	# ergodic
+	count = 0
 	for x in rts:
 		simple_sheet = eval(x.answer)
 		list_count = 0
@@ -103,5 +104,6 @@ def result(request, qid):
 				for i in l:
 					dataset[list_count][int(i)-1] += 1
 			list_count += 1
+		count += 1
 	print dataset
-	return render(request, 'results/results.html' ,{'Questionnaire':q ,'naire':Naire ,'qid':qid ,'result':dataset})
+	return render(request, 'results/results.html' ,{'Questionnaire':q ,'naire':Naire ,'qid':qid ,'result':dataset ,'count':count,})
