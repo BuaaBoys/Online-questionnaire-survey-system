@@ -14,6 +14,9 @@ from accounts.models import User
 from models import Questionnaire
 from form import QuestForm
 from results.questions.questions import Question, Questions
+from results.models import Result
+
+from investmanager.context_processors import manage_proc
 import sys
 
 reload(sys)
@@ -22,7 +25,6 @@ sys.setdefaultencoding('utf8')
 def show_quest_fill_page(request):
 	'''let investigator create the questionnaire'''
 	auth = Authentication(request)
-	print auth.is_login()
 	if not auth.is_login():
 		return HttpResponseRedirect("/message/loginfirst")
 	return render(request, "investmanager/add_quest.html", {})
@@ -54,7 +56,6 @@ def publish(request):
 		print e
 	form = QuestForm(request.POST, questions)
 	if form.is_valid():
-		request.COOKIES.get("email")
 		quest = form.save(request)
 		questions.clean()
 		# this place manage the content to xml conversion, use the id which database automatic generate
@@ -75,7 +76,7 @@ def quest(request, no):
 	subject = quest.subject
 	description = quest.description
 
-	return render(request, "investmanager/show_quest.html",{'id':id, "title":title, "subject":subject, "description":description,})
+	return render(request, "investmanager/show_quest.html",{"id":id, "title":title, "subject":subject, "description":description,})
 
 def manage(request):
 	'''go to the quest_manage page'''
@@ -86,7 +87,7 @@ def manage(request):
 
 	quest_list = Questionnaire.objects.filter(author = current_user)
 
-	if request.method == "GET":	
+	if request.method == "GET":
 		return render(request, "investmanager/manage_quest.html", {'quest_list':quest_list, })
 	else:
 		if request.POST.has_key("reopen"):
@@ -94,18 +95,39 @@ def manage(request):
 			quest = Questionnaire.objects.filter(id = re)[0]
 			quest.closed = False
 			quest.save()
-			
+
 
 		elif request.POST.has_key("close"):
 			re = int(request.POST["close"])
 			quest = Questionnaire.objects.filter(id = re)[0]
 			quest.closed = True
 			quest.save()
-			
 
-		return render(request, "investmanager/manage_quest.html", {'quest_list':quest_list, })	
+
+		return render(request, "investmanager/manage_quest.html", {'quest_list':quest_list, })
 
 
 def manage_all(request):
-
-	return render(request, "investmanager/index.html", {})
+	auth = Authentication(request)
+	if not auth.is_login():
+		return HttpResponseRedirect("/message/loginfirst")
+	user = auth.get_user()
+	pub_questionnaires = Questionnaire.objects.filter(author = user)
+	results = Result.objects.filter(participant_id = user.email)
+	created_quest = []
+	created_num = 1
+	filled_quest = []
+	filled_num = 1
+	for quest in pub_questionnaires:
+		created_quest.append((created_num, quest.title, quest.closed))
+		created_num += 1
+		if created_num >=5:
+			break
+	for result in results:
+		quest = Questionnaire.objects.get(id = result.questionnaire_id)
+		filled_quest.append((filled_num, quest.title, quest.closed))
+		filled_num += 1
+		if filled_num >= 5:
+			break
+	context = RequestContext(request, {"created_quest": created_quest, "filled_quest": filled_quest}, processors = [manage_proc])
+	return render(request, "investmanager/index.html", context)
