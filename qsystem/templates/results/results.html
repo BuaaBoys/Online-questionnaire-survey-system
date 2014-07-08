@@ -26,8 +26,8 @@
 			<div id="index" class="tab-pane active" >
 				<div>
 				<h1>
+					{{qid}}:&nbsp;&nbsp;
 					{{Questionnaire.title}}
-					{{qid}}
 				</h1>
 				<legend></legend>
 				<div>
@@ -38,8 +38,9 @@
 					</small>
 					</p>
 				</blockquote>
+				<legend></legend>
 				<div>
-					<h3>{{count}}</h3>
+					<p class="text-right"><em>已收到{{count}}份答卷</em></p>
 				</div>
 				</div>
 
@@ -48,7 +49,7 @@
 		{% for i in result %}
 			<div id="result{{forloop.counter}}" class="tab-pane">
 			{% for q in naire.questionList %}
-			<!-- Judge if a essay question-->
+
 			{% if forloop.counter = forloop.parentloop.counter and q.qtype != 'essay'%}
 			<div class="col-md-4 table-responsive bs-example">
 				<div>
@@ -93,17 +94,42 @@
 					</tr>
 				</table>
 				{% endif %}
+				
 			</div>
 			<div class="col-md-8">
-				<!--This division is for chart.js-->
+				<div class="panel panel-default">
+				<div class="panel-body canvas-holder">
+				<canvas id="myChart{{forloop.counter}}" width="700" height="400"></canvas>
+				</div>
+				</div>
 			</div>
 			{% endif %}
-			<!-- End of none Essay questions block-->
-			<!-- Start to handle with Essay questions-->
+			{% if forloop.counter = forloop.parentloop.counter and q.qtype == 'essay' %}
+				<div class="col-md-1"></div>
+				<div class="col-md-10">
+					<div class="panel panel-default">
+					  <div class="panel-heading">
+					    <h3 class="panel-title">{{forloop.counter}}:{{q.content}}</h3>
+					  </div>
+					  <div class="panel-body">
+					  <ul class="list-group">
+					  {% for t in i %}
+					  <li class="list-group-item">
+					    {{t}}
+					  </li>
+					  {% endfor %}
+					  </ul>
+					  </div>
+					</div>
+				</div>
+			{% endif %}
 			{% endfor %}
 			</div>
+
 		{% endfor %}
+
 		</div>
+
 	</div>
 	</div>
 	</div>
@@ -116,5 +142,40 @@
 			.preventDefault()
 			$(this).tab('show')
 		})
+	</script>
+	<script type="text/javascript">
+		/*
+		var ctx1 = document.getElementById("myChart1").getContext("2d");
+		var data1 = {
+			labels: ["January", "February", "March", "April", "May", "June", "July",],
+			datasets: [
+				{
+					label: "My First dataset",
+					fillColor: "rgba(220,220,220,0.5)",
+					strokeColor: "rgba(220,220,220,0.8)",
+					highlightFill: "rgba(220,220,220,0.75)",
+					highlightStroke: "rgba(220,220,220,1)",
+					data: [65, 59, 80, 81, 56, 55, 40,]
+				},
+			]
+		};*/
+		{% for i in result %}
+		var ctx{{forloop.counter}} = document.getElementById("myChart{{forloop.counter}}").getContext("2d");
+		var data{{forloop.counter}} = {
+			labels : [{%for it in i %}"{{forloop.parentloop.counter}}",{% endfor %}],
+			datasets : [
+				{
+					label: "My Second dataset",
+					fillColor: "rgba(151,187,205,0.5)",
+					strokeColor: "rgba(151,187,205,0.8)",
+					highlightFill: "rgba(151,187,205,0.75)",
+					highlightStroke: "rgba(151,187,205,1)",
+					data : [{%for it in i %}{{it}},{% endfor %}]
+				},
+			]
+		};
+		new Chart(ctx{{forloop.counter}}).Bar(data{{forloop.counter}})
+		{% endfor %}
+		//new Chart(ctx1).Bar(data1);
 	</script>
 {% endblock %}

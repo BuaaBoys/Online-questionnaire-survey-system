@@ -67,44 +67,49 @@ def error404(request):
 	return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "xxxx", "/"),})
 
 def result(request, qid):
-	Naire = Questions()
-	Naire.clean()
-	Naire.qid = qid
-	Naire.read()
-	q = get_object_or_404(Questionnaire, pk=qid)
-	rts = Result.objects.filter(questionnaire_id=qid)
-	
-	# Start doing data collection
-	# Dataset init
-	dataset = []
-	for x in xrange(1,Naire.count+1):
-		if Naire.questionList[x-1].qtype == 'single':
-			choice_set = []
-			for x in xrange(0,len(Naire.questionList[x-1].items)):
-				choice_set.append(0)
-			dataset.append(choice_set)
-		elif Naire.questionList[x-1].qtype == 'multiply':
-			choice_set = []
-			for x in xrange(0,len(Naire.questionList[x-1].items)):
-				choice_set.append(0)
-			dataset.append(choice_set)
-		elif Naire.questionList[x-1].qtype == 'judge':
-			choice_set = [ 0 , 0 ]
-			dataset.append(choice_set)
-		elif Naire.questionList[x-1].qtype == 'essay':
-			dataset.append([])
+	try:
+		Naire = Questions()
+		Naire.clean()
+		Naire.qid = qid
+		Naire.read(get_object_or_404(Questionnaire, pk=qid).contents)
+		q = get_object_or_404(Questionnaire, pk=qid)
+		rts = Result.objects.filter(questionnaire_id=qid)
+		
+		# Start doing data collection
+		# Dataset init
+		dataset = []
+		for x in xrange(1,Naire.count+1):
+			if Naire.questionList[x-1].qtype == 'single':
+				choice_set = []
+				for x in xrange(0,len(Naire.questionList[x-1].items)):
+					choice_set.append(0)
+				dataset.append(choice_set)
+			elif Naire.questionList[x-1].qtype == 'multiply':
+				choice_set = []
+				for x in xrange(0,len(Naire.questionList[x-1].items)):
+					choice_set.append(0)
+				dataset.append(choice_set)
+			elif Naire.questionList[x-1].qtype == 'judge':
+				choice_set = [ 0 , 0 ]
+				dataset.append(choice_set)
+			elif Naire.questionList[x-1].qtype == 'essay':
+				dataset.append([])
 
-	print dataset
-	# ergodic
-	count = 0
-	for x in rts:
-		simple_sheet = eval(x.answer)
-		list_count = 0
-		for l in simple_sheet:
-			if Naire.questionList[list_count].qtype != 'essay':
-				for i in l:
-					dataset[list_count][int(i)-1] += 1
-			list_count += 1
-		count += 1
-	print dataset
-	return render(request, 'results/results.html' ,{'Questionnaire':q ,'naire':Naire ,'qid':qid ,'result':dataset ,'count':count,})
+		print dataset
+		# ergodic
+		count = 0
+		for x in rts:
+			simple_sheet = eval(x.answer)
+			list_count = 0
+			for l in simple_sheet:
+				if Naire.questionList[list_count].qtype != 'essay':
+					for i in l:
+						dataset[list_count][int(i)-1] += 1
+				elif Naire.questionList[list_count].qtype == 'essay':
+					dataset[list_count] += l
+				list_count += 1
+			count += 1
+		print dataset
+		return render(request, 'results/results.html' ,{'Questionnaire':q ,'naire':Naire ,'qid':qid ,'result':dataset ,'count':count,})
+	except:
+		return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "xxxx", "/"),})
