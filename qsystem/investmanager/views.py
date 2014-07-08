@@ -76,3 +76,7 @@ def quest(request, no):
 	description = quest.description
 
 	return render(request, "investmanager/show_quest.html",{'id':id, "title":title, "subject":subject, "description":description,})
+
+def manage_all(request):
+
+	return render(request, "investmanager/index.html", {})

@@ -7,4 +7,5 @@ urlpatterns = patterns('',
 		url(r'^(\d{1,})$', views.quest),
 		url(r'^publish$', views.publish),
 		url(r'^$', views.show_quest_fill_page),
+		url(r'^home$', views.manage_all),
 		)
