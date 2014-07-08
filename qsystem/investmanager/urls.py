@@ -8,4 +8,5 @@ urlpatterns = patterns('',
 		url(r'^publish$', views.publish),
 		url(r'^manage$', views.manage),
 		url(r'^$', views.show_quest_fill_page),
+		url(r'^home$', views.manage_all),
 		)

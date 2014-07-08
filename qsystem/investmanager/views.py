@@ -91,3 +91,7 @@ def reopen(request):
 	printed = request.POST
 
 	return render(request, "investmanager/manage_quest.html", {'quest_list':NULL, 'printed':request.POST})
+
+def manage_all(request):
+
+	return render(request, "investmanager/index.html", {})
