@@ -12,9 +12,10 @@ def answer(request, qid):
 		Naire = Questions()
 		Naire.clean()
 		Naire.qid = qid
-		Naire.read()
-		#Naire.write()
+		print 'questions:', len(Naire.questionList)
 		q = get_object_or_404(Questionnaire, pk=qid)
+		Naire.read(q.contents)
+		print 'questions:', len(Naire.questionList)
 		return render(request, 'results/answer.html' ,{'Questionnaire':q ,'naire':Naire ,'qid':qid})
 	except:
 		return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "xxxx", "/"),})
@@ -23,8 +24,8 @@ def publish(request, qid):
 	try:
 		Naire = Questions()
 		Naire.clean()
-		Naire.qid = qid
-		Naire.read()
+ 		Naire.qid = qid
+		Naire.read(get_object_or_404(Questionnaire, pk=qid).contents)
 		result = []
 		for x in xrange(1,Naire.count+1):
 			if Naire.questionList[x-1].qtype == 'single':
@@ -56,7 +57,7 @@ def publish(request, qid):
 		Naire = Questions()
 		Naire.clean()
 		Naire.qid = qid
-		Naire.read()
+		Naire.read(get_object_or_404(Questionnaire, pk=qid).contents)
 		return render(request, 'results/answer.html',{'Questionnaire':q ,'naire':Naire ,'qid':qid, 'errorMsg':'Not finished yet!'})	
 		
 def success(request):

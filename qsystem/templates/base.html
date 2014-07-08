@@ -12,7 +12,7 @@
     </style>
     <script type="text/javascript">
         function logout(){
-            docCookies.removeItem('email','/');
+            docCookies.removeItem('uid','/');
             document.location = "/message/loggedout"
         }
         function redirect_to_quest(){
@@ -27,9 +27,11 @@
             </div>
             <div class="navbar-collapse collapse">
                 <script type="text/javascript">
-                    if (docCookies.hasItem('email')){
+                    //if (docCookies.hasItem('email')){
+                    if ('{{ custom_user.login }}'=='true'){
                         document.write("<ul class=\"nav navbar-nav navbar-right\">");
-                        document.write("<li><a href=\"#\">"+ docCookies.getItem('email').substr(1, docCookies.getItem('email').lastIndexOf("\"") - 1) +"</a></li>");
+                        //document.write("<li><a href=\"#\">"+ docCookies.getItem('email').substr(1, docCookies.getItem('email').lastIndexOf("\"") - 1) +"</a></li>");
+                        document.write("<li><a href=\"#\">"+ '{{ custom_user.email }}' +"</a></li>");
                         document.write("<li><a href=\"javascript:logout()\">Logout</a></li>");
                         document.write("</ul>");
                         document.write("");

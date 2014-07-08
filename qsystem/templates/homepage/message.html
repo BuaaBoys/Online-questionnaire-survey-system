@@ -3,7 +3,9 @@
 {% block body %}
 <div class="container">
 	<div class="alert alert-{{ message.alert_type }}" role="alert">
-		<strong>{{ message.message_strong }}</strong>{{ message.message_content }}
+		<strong>{{ message.message_strong }}</strong>
+		<br>
+		{{ message.message_content }}
 		<br>
 		You will be redirected to homepage in <span id="totalSecond">5</span> seconds.
 	</div>

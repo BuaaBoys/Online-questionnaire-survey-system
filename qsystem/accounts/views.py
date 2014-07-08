@@ -5,6 +5,7 @@ from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 import urllib
+from accounts.authentication import Authentication
 
 def register(request):
 	is_error = "hidden"
@@ -17,9 +18,8 @@ def register_submit(request):
 	except:
 		form = UserForm(request.POST)
 		form.save()
-		is_error = "hidden"
-		error_msg = ""
-		return render(request, 'accounts/register.html', {"error_msg":error_msg, "is_error":is_error})
+		response = HttpResponseRedirect("/message/registered")
+		return response
 	is_error = ""
 	error_msg = "Existed E-mail Address"
 	return render(request, 'accounts/register.html', {"error_msg":error_msg, "is_error":is_error})
@@ -27,7 +27,6 @@ def register_submit(request):
 def login(request):
 	is_error = "hidden"
 	error_msg = ""
-	print request.COOKIES.get('email','')
 	return render(request, "accounts/login.html",{"error_msg":error_msg, "is_error":is_error})
 
 def login_submit(request):
@@ -37,11 +36,10 @@ def login_submit(request):
 		is_error = ""
 		error_msg = "E-mail does not exist"
 		return render(request, "accounts/login.html", {"error_msg":error_msg, "is_error":is_error})
+	user_auth = Authentication(request)
 	if user.password == request.POST['password']:
 		response = HttpResponseRedirect("/message/loggedin")
-		# tmp_email = urllib.quote_plus(user.email)
-		tmp_email = user.email
-		response.set_cookie('email', tmp_email, 3600)
+		user_auth.set_cookie(response, user)
 		return response
 	else:
 		is_error = ""
