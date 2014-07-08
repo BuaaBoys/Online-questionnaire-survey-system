@@ -5,6 +5,7 @@ from results.models import Result
 from investmanager.models import Questionnaire 
 import xml.dom.minidom
 from results.questions.questions import Questions
+from accounts.authentication import Authentication
 
 
 def answer(request, qid):
@@ -45,11 +46,13 @@ def publish(request, qid):
 			elif Naire.questionList[x-1].qtype == 'essay':
 				result += request.POST[str(x)] + ','
 
-		user = "anonymity@admin.com"
-		user = request.COOKIES.get("email")
+		auth = Authentication(request)
+		user = auth.get_user()
 		if user == None:
-			user = "anonymity@admin.com"
-		r = Result(questionnaire_id=qid,participant_id=user,answer=result)
+			user_email = "anonymity@admin.com"
+		else:
+			user_email = user.email
+		r = Result(questionnaire_id=qid,participant_id=user_email,answer=result)
 		r.save()
 		return render(request, 'results/success.html')
 	except:
