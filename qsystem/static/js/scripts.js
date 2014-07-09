@@ -42,7 +42,7 @@ function addQuestion() {
 	type.setAttribute("value", selected.value);
 	
     question.id = selected.value;
-    
+    question.setAttribute("no", no);
 	var describe = document.createElement("textarea");
 	describe.setAttribute("class", "form-control");
     describe.setAttribute("name", "question");
@@ -54,18 +54,18 @@ function addQuestion() {
     delQue.setAttribute("type", "button");
     delQue.setAttribute("class", "delItem btn btn-danger btn-xs");
     delQue.setAttribute("onclick", "deleteQuestion(this)");
-    delQue.setAttribute("value", "删除本题");
+    delQue.setAttribute("value", "Delete");
 
     var inc = document.createElement("a");
     inc.setAttribute("class", "addItem btn btn-link btn-xs");
     inc.setAttribute("onclick", "addItem(this)");
-	inc.textContent = "增加选项";
+	inc.textContent = "Add an item";
 
     var del = document.createElement("a");
 
     del.setAttribute("class", "delItem btn btn-link btn-xs");
     del.setAttribute("onclick", "deleteItem(this)");
-	del.textContent = "删除选项";
+	del.textContent = "Delete items";
 
 	question.appendChild(type);
     question.appendChild(para);
@@ -100,20 +100,22 @@ function deleteQuestion(obj) {
 		var type = "";
 		switch (question.id) {
 		case "single":
-			type = "单选题";
+			type = "Single Choice";
 			break;
 		case "multiply":
-			type = "多选题";
+			type = "Multiply Choice";
 			break;
 		case "judge":
-			type = "判断题";
+			type = "Judge";
 			break;
 		case "essay":
-			type = "简答题";
+			type = "Essay";
 			break;
 		}
 		var para = question.getElementsByTagName("p")[0];
 		para.textContent = (i + 1) + '.' + type;
+		question.setAttribute("no", i);
+
     }
 }
 
@@ -136,11 +138,11 @@ function addItem(obj) {
     item.setAttribute("class", "item checkbox");
     choose.setAttribute("type", "checkbox");
     choose.setAttribute("class", "checkbox checkbox-inline");
-    label.textContent = "选项" + (no + 1) + '.';
+    label.textContent = "No." + (no + 1);
     text.setAttribute("type", "text");
-	text.setAttribute("class", "form-control");
-	var index = document.getElementsByClassName("question").length - 1;
-    text.setAttribute("name", "items" + index);
+    text.setAttribute("class", "form-control");
+    var index = document.getElementsByClassName("question").length - 1;
+    text.setAttribute("name", "items" + parent.getAttribute("no"));
     item.appendChild(choose);
     item.appendChild(label);
     item.appendChild(text);
@@ -165,7 +167,7 @@ function deleteItem(obj) {
     items = parent.getElementsByClassName("item");
     for (var i=0; i<items.length; ++i) {
 		var label = items[i].getElementsByTagName("label")[0];
-		label.textContent = "选项" + (i + 1) + '.';
+		label.textContent = "No." + (i + 1);
     }	
 }
 
@@ -180,7 +182,7 @@ function select_all(thisform)
 {
 	var inputs = thisform.getElementsByClassName("quest_checkbox");
 
-	if(inputs[0].checked == true)		
+	if(inputs[0].checked == true)
 		for(var i=1;i<inputs.length;i++)
 		{
 			if (inputs[i].getAttribute("type")=="checkbox")
@@ -189,7 +191,7 @@ function select_all(thisform)
 			}
 
 		}
-	else 
+	else
 		for(var i=1;i<inputs.length;i++)
 		{
 			if (inputs[i].getAttribute("type")=="checkbox")
