@@ -60,7 +60,8 @@ def publish(request):
 		quest = form.save(request)
 		questions.clean()
 		# this place manage the content to xml conversion, use the id which database automatic generate
-	return HttpResponseRedirect(str(quest.id))
+	#return HttpResponseRedirect(str(quest.id))
+	return HttpResponseRedirect("/quest/home")
 
 
 def quest(request, no):
@@ -167,18 +168,18 @@ def manage_dashboard(request, type, page):
 	if page > max_page:
 		raise Http404
 	if page == max_page:
-		last_result_index = len(results)
+		first_result_index = 0
 	else:
-		last_result_index = 10 * (page - 1) + 10
+		first_result_index = len(results)-10-(page-1)*10
 	quest_list = []
 	if type == "filled":
-		for index in range(10 * (page - 1), last_result_index):
+		for index in range(first_result_index, len(results)-1-(page-1)*10):
 			quest = Questionnaire.objects.get(id = results[index].questionnaire_id)
 			quest_list.append(quest)
 		context = RequestContext(request, {'quest_list':quest_list, "current_page": page, "max_page": max_page}, processors = [manage_proc])
 		return render(request, "investmanager/filled_quest.html", context)
 	else:
-		quest_list = results[10*(page-1): last_result_index]
+		quest_list = results[first_result_index:len(results)-(page-1)*10]
 	context = RequestContext(request, {'quest_list':quest_list, 'current_page':page, 'max_page':max_page, 'type': type}, processors = [manage_proc])
 	return render(request, "investmanager/quest_template.html", context)
 
