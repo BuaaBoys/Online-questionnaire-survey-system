@@ -10,5 +10,6 @@ urlpatterns = patterns('',
 		url(r'^modify/(?P<no>\d{1,})$', views.modify_quest, name='modify'),
 		url(r'^$', views.redirect_to_home),
 		url(r'^home$', views.manage_all, name='home'),
-		url(r'^(?P<type>[a-z]{1,})/(?P<page>\d{1,})$', views.manage_dashboard, name='dashboard')
+		url(r'^(?P<type>[a-z]{1,})/(?P<page>\d{1,})$', views.manage_dashboard, name='dashboard'),
+		url(r'toogle/(?P<oldStatus>[a-z]{1,})/(?P<no>\d{1,})', views.toogle_close, name='toogle_close'),
 		)

@@ -7,10 +7,10 @@ import datetime
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import render,render_to_response
 from django.template import loader, RequestContext
-
+from django.utils import simplejson
+from django.core import serializers
 from accounts.authentication import Authentication
 from accounts.models import User
-
 from models import Questionnaire
 from form import QuestForm
 from results.questions.questions import Question, Questions
@@ -83,14 +83,14 @@ def quest(request, no):
 def close_or_open(request):
 	if request.method == "POST":
 		if request.POST.has_key("reopen"):
-			re = int(request.POST["reopen"])
-			quest = Questionnaire.objects.filter(id = re)[0]
+			open_id = int(request.POST["reopen"])
+			quest = Questionnaire.objects.filter(id = open_id)[0]
 			quest.closed = False
 			quest.save()
 
 		elif request.POST.has_key("close"):
-			re = int(request.POST["close"])
-			quest = Questionnaire.objects.filter(id = re)[0]
+			close_id = int(request.POST["close"])
+			quest = Questionnaire.objects.filter(id = close_id)[0]
 			quest.closed = True
 			quest.save()
 
@@ -220,3 +220,26 @@ def modify_quest(request, no):
 	
 	return render(request, 'investmanager/modify_quest.html', {'id':id, 'title':title, 'subject':subject, 'description':description, 'questions':questions.questionList},)
 
+def toogle_close(request, oldStatus, no):
+	'''toogle the closed status of a questionnaire '''
+
+	nowStatus = ''
+	if oldStatus == 'open':
+		quest = Questionnaire.objects.filter(id = int(no))[0]
+		quest.closed = False
+		quest.save()
+		print 'closed:', quest.closed
+		nowStatus = "{\"status\": \"close\"}"
+
+	elif oldStatus == 'close':
+		quest = Questionnaire.objects.filter(id = int(no))[0]
+		quest.closed = True
+		quest.save()
+		print 'closed:', quest.closed
+		nowStatus = "{\"status\":\"open\"}"
+
+
+	data = simplejson.dumps(nowStatus, ensure_ascii = False)
+	response = HttpResponse(data)
+	print response
+	return response
