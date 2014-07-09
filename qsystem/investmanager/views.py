@@ -93,6 +93,12 @@ def close_or_open(request):
 			quest.closed = True
 			quest.save()
 
+		elif request.POST.has_key("publish"):
+			re = int(request.POST["publish"])
+			quest = Questionnaire.objects.filter(id = re)[0]
+			quest.released = True
+			quest.save()
+
 def manage_all(request):
 	auth = Authentication(request)
 	if not auth.is_login():
@@ -109,13 +115,13 @@ def manage_all(request):
 	filled_num = 1
 
 	for quest in pub_questionnaires:
-		created_quest.append((created_num, quest.title, quest.closed,quest.id))
+		created_quest.append(quest)
 		created_num += 1
 		if created_num > 5:
 			break
 	for result in results:
 		quest = Questionnaire.objects.get(id = result.questionnaire_id)
-		filled_quest.append((filled_num, quest.title, quest.closed))
+		filled_quest.append(quest)
 		filled_num += 1
 		if filled_num > 5:
 			break
