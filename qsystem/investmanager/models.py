@@ -15,6 +15,9 @@ class Questionnaire(models.Model):
 	date = models.DateTimeField(auto_now_add=True)
 	closed = models.BooleanField(default=False)
 	released = models.BooleanField(default=False)
+	anonymous_limit = models.BooleanField(default=False)
+	permitobjects_limit = models.TextField(default="[]")
+	forbidobjects_limit = models.TextField(default="[]")
 
 	def __unicode__(self):
 		return self.title
