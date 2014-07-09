@@ -3,7 +3,7 @@
 {% block content %}
 
 	<script src="{{ STATIC_URL }}js/scripts.js"></script>
-	<form method = "POST" target = "_self" >
+	<form method = "POST" action = {%url "quest:published"  current_page %} target = "_self" >
 			{% for item in quest_list reversed %}
 
 			

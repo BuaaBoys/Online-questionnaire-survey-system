@@ -93,30 +93,71 @@ def close_or_open(request):
 			quest.closed = True
 			quest.save()
 
+def created(request, page):
+	'''go to the created_quest page'''
+	auth = Authentication(request)
+	current_user = auth.get_user()
+	#current_email = user.email
 
-def published(request):
+	close_or_open(request)
+
+	page = int(page)
+	results = Questionnaire.objects.filter(author = current_user)
+	max_page =int(math.ceil(len(results)/10.0))
+	if page > max_page:
+		raise Http404
+	if page == max_page:
+		last_result_index = len(results)
+	else:
+		last_result_index = 10 * (page - 1) + 10
+	cre_quest = []
+	cre_quest = results[10*(page-1): last_result_index]
+	context = RequestContext(request, {'quest_list':cre_quest, 'current_page':page, 'max_page':max_page, }, processors = [manage_proc])
+	return render(request, "investmanager/created_quest.html", context)
+
+def published(request, page):
 	'''go to the published_quest page'''
 
 	auth = Authentication(request)
 	current_user = auth.get_user()
 	#current_email = user.email
 
-	quest_list = Questionnaire.objects.filter(author = current_user,released = True)
-
 	close_or_open(request)
 
-	context = RequestContext(request, {'quest_list':quest_list, 'quest_len':len(quest_list)}, processors = [manage_proc])
+	page = int(page)
+	results = Questionnaire.objects.filter(author = current_user,released = True)
+	max_page =int(math.ceil(len(results)/10.0))
+	if page > max_page:
+		raise Http404
+	if page == max_page:
+		last_result_index = len(results)
+	else:
+		last_result_index = 10 * (page - 1) + 10
+	pub_quest = []
+	pub_quest = results[10*(page-1): last_result_index]
+
+	context = RequestContext(request, {'quest_list':pub_quest, 'current_page':page, 'max_page':max_page, }, processors = [manage_proc])
 	return render(request, "investmanager/published_quest.html", context)
 
-def draft(request):
+def draft(request, page):
 	'''go to the draft_quest page'''
 
 	auth = Authentication(request)
 	current_user = auth.get_user()
 	#current_email = user.email
+	page = int(page)
+	results = Questionnaire.objects.filter(author = current_user,released = False)
+	max_page =int(math.ceil(len(results)/10.0))
 
-	quest_list = Questionnaire.objects.filter(author = current_user, released = False)
-	context = RequestContext(request, {'quest_list':quest_list,}, processors = [manage_proc])
+	if page > max_page:
+		raise Http404
+	if page == max_page:
+		last_result_index = len(results)
+	else:
+		last_result_index = 10 * (page - 1) + 10
+	draft_quest = []
+	draft_quest = results[10*(page-1): last_result_index]
+	context = RequestContext(request, {'quest_list':draft_quest, 'current_page':page, 'max_page':max_page,}, processors = [manage_proc])
 	return render(request, "investmanager/draft_quest.html", context)
 
 def manage_all(request):
@@ -168,3 +209,40 @@ def manage_filled(request, page):
 		filled_quest.append((quest.id, quest.title, quest.subject, quest.description, quest.closed))
 	context = RequestContext(request, {"filled_quest": filled_quest, "current_page": page, "max_page": max_page}, processors = [manage_proc])
 	return render(request, "investmanager/filled_quest.html", context)
+
+def manage_cao(request, type, page):
+	page = int(page)
+	auth = Authentication(request)
+	if not auth.is_login():
+		return HttpResponseRedirect("/message/loginfirst")
+	current_user = auth.get_user()
+	close_or_open(request)
+	if type == "filled":
+		results = Result.objects.filter(participant_id = current_user.email)
+	elif type == "created":
+		results = Questionnaire.objects.filter(author = current_user)
+	elif type == "published":
+		results = Questionnaire.objects.filter(author = current_user, released = True)
+	elif type == "draft":
+		results = Questionnaire.objects.filter(author = current_user, released = False)
+	else:
+		raise Http404
+	max_page =int(math.ceil(len(results)/10.0))
+	if page > max_page:
+		raise Http404
+	if page == max_page:
+		last_result_index = len(results)
+	else:
+		last_result_index = 10 * (page - 1) + 10
+	quest_list = []
+	if type == "filled":
+		for index in range(10 * (page - 1), last_result_index):
+			quest = Questionnaire.objects.get(id = results[index].questionnaire_id)
+			quest_list.append(quest)
+		context = RequestContext(request, {'quest_list':quest_list, "current_page": page, "max_page": max_page}, processors = [manage_proc])
+		return render(request, "investmanager/filled_quest.html", context)
+	else:
+		quest_list = results[10*(page-1): last_result_index]
+	context = RequestContext(request, {'quest_list':quest_list, 'current_page':page, 'max_page':max_page, 'type': type}, processors = [manage_proc])
+	return render(request, "investmanager/quest_template.html", context)
+
