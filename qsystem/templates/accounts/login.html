@@ -4,29 +4,32 @@
 <body>
 <div class="container">
 	<div class="row">
-		<div class="col-md-4"></div>
+		<div class="col-md-8">
+			<div class="jumbotron">
+				<h1>QSystem </h1>
+				<p>Login QSystem and see what you can do.</p>
+				<button class="btn btn-primary btn-md" onlick="javascript:submit()">Register</button> Do not have an account? 
+			</div>
+		</div>
 		<div class="col-md-4">
-			<div class="panel panel-default">
-			<div class="panel-body">
-				<form role="form" method="post" action="{% url 'login_submit' %}">
+				<form role="form" method="post" action="{% url 'accounts:login_submit' %}">
 					{% csrf_token %}
 					<div class="form-group">
 						<label for="InputEmail1">Email address</label>
 						<input type="email" class="form-control" name="email" placeholder="Enter email" max="50" required>
 					</div>
+					<br/>
 					<div class="form-group">
 						<label for="InputPassword1">Password</label>
 						<input type="password" class="form-control" name="password" placeholder="Password: 5-20 Letters or numbers" required pattern="^[a-zA-Z0-9-_\.]{5,12}$" maxlength="20">
 					</div>
-					<button class="btn btn-primary" onlick="javascript:submit()">Login</button>
+					<br/>
+					<button class="btn btn-primary btn-md col-sm-3" onlick="javascript:submit()">Login</button>
 					<div class="form-group">
 						<div class="alert alert-danger alert-dismissible" {{ is_error }} role="alert">{{ error_msg }}</div>
 					</div>
 				</form>
-			</div>
-			</div>
 		</div>
-		<div class="col-md-4"></div>
 	</div>
 </div>
 <script type="text/javascript">

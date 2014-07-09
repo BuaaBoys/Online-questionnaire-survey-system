@@ -12,7 +12,7 @@
 	</div>
 	<div class="col-md-4">
 	<div class="panel-body">
-		<form role="form" action="{% url 'register_submit' %}" method="POST">
+		<form role="form" action="{% url 'accounts:register_submit' %}" method="POST">
 			{% csrf_token %}
 			<div class="form-group">
 				<label for="InputEmail1">Email address</label>
@@ -51,7 +51,7 @@
 			</div>
 			<input type="hidden" name="registered" value=True>
 			<input type="hidden" name="register_date" id="register_date">
-			<button class="btn btn-primary btn-md" onlick="javascript:submit()">Submit</button>
+			<button class="btn btn-primary btn-md col-sm-3" onlick="javascript:submit()">Submit</button>
 		</form>
 	</div>
 	</div>
