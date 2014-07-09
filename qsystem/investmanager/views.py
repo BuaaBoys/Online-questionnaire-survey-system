@@ -114,7 +114,7 @@ def manage_all(request):
 		if created_num > 5:
 			break
 	for result in results:
-		quest = Questionnaire.objects.get(id = result.questionnaire_id)
+		quest = Questionnaire.objects.get(id = result.questionnaire_id.id)
 		filled_quest.append((filled_num, quest.title, quest.closed))
 		filled_num += 1
 		if filled_num > 5:
@@ -138,7 +138,7 @@ def manage_filled(request, page):
 		last_result_index = 10 * (page - 1) + 10
 	filled_quest = []
 	for index in range(10 * (page - 1), last_result_index):
-		quest = Questionnaire.objects.get(id = results[index].questionnaire_id)
+		quest = Questionnaire.objects.get(id = results[index].questionnaire_id.id)
 		filled_quest.append((quest.id, quest.title, quest.subject, quest.description, quest.closed))
 	context = RequestContext(request, {"filled_quest": filled_quest, "current_page": page, "max_page": max_page}, processors = [manage_proc])
 	return render(request, "investmanager/filled_quest.html", context)
@@ -173,7 +173,8 @@ def manage_dashboard(request, type, page):
 	quest_list = []
 	if type == "filled":
 		for index in range(10 * (page - 1), last_result_index):
-			quest = Questionnaire.objects.get(id = results[index].questionnaire_id)
+			quest = results[index].questionnaire_id
+			#print quest.title
 			quest_list.append(quest)
 		context = RequestContext(request, {'quest_list':quest_list, "current_page": page, "max_page": max_page}, processors = [manage_proc])
 		return render(request, "investmanager/filled_quest.html", context)

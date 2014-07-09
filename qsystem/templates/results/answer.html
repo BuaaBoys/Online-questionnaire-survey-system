@@ -32,7 +32,7 @@
 
 			</div>
 		</div>
-		<form role="form" action="{%url 'results.views.publish' qid%} " method="post">
+		<form role="form" action="{%url 'results:publish' qid%} " method="post">
 			</fieldset>
 			{% csrf_token %}
 			{% for q in naire.questionList %}

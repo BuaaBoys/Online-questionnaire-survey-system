@@ -15,8 +15,16 @@ def answer(request, qid):
 		Naire.qid = qid
 		#print 'questions:', len(Naire.questionList)
 		q = get_object_or_404(Questionnaire, pk=qid)
-		if q.contents:
-			pass
+		if q.closed or not q.released:
+			raise Exception()
+
+		auth = Authentication(request)
+		user = auth.get_user()
+		rts = Result.objects.filter(questionnaire_id=qid)
+		for r in rts:
+			if r.participant_id == user.email:
+				return render(request, "homepage/message.html", {"message": AlertMessage("warning", "Don't answer same naire twice!", "You've already answered this Questionnaire", "/"),})
+		
 		Naire.read(q.contents)
 		#print 'questions:', len(Naire.questionList)
 		return render(request, 'results/answer.html' ,{'Questionnaire':q ,'naire':Naire ,'qid':qid})
@@ -78,6 +86,8 @@ def result(request, qid):
 		Naire.qid = qid
 		Naire.read(get_object_or_404(Questionnaire, pk=qid).contents)
 		q = get_object_or_404(Questionnaire, pk=qid)
+		if not q.released:
+			raise Exception()
 		rts = Result.objects.filter(questionnaire_id=qid)
 
 		# Start doing data collection
