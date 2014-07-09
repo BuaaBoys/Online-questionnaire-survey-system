@@ -11,7 +11,7 @@ class User(models.Model):
 	registered = models.NullBooleanField()
 	register_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 	def __unicode__(self):
-		return "E-mail:" + self.email
+		return self.email
 
 class UserForm(ModelForm):
 	class Meta:

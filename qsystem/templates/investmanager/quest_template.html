@@ -7,10 +7,10 @@
 			<div class="panel-heading">
 				<div class="row">
 					{% if item.released %}
-					<div class="col-lg-11">{{ item.title }} </div>
+					<div class="col-lg-11">{{ item.title }} <span class="glyphicon glyphicon-ok" color="green"></span></div>
 					<div class="col-lg-1">
 						{% if item.closed %}
-						<button type = "submit" class = "btn btn-warning btn-xs" name = "reopen" value = "{{  item.id }}">Open</button>
+						<button type = "submit" class = "btn btn-warning btn-xs" name = "reopen" value = "{{  item.id }}">Reopen</button>
 						{% else %}
 						<button type = "submit" class = "btn btn-danger btn-xs" name = "close" value = "{{  item.id }}">Close</button>
 						{% endif %}

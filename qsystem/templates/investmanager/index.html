@@ -2,10 +2,7 @@
 {% block title %}Manage{% endblock %}
 {% block content %}
 <div class="panel panel-default">
-	<!-- Default panel contents -->
 	<div class="panel-heading">Created Questionnaires</div>
-	<form method = "POST" target = "_self" >
-		<!-- Table -->
 		<table class="table">
 			<thead>
 				<tr>
@@ -15,39 +12,34 @@
 					<th class="col-lg-3">Option</th>
 				</tr>
 			</thead>
-			<tbody>
-				{% for item in created_quest%}
-				<script type="text/javascript">
-					document.write("<tr>");
-					document.write("<td>" + '{{ item.0 }}' + "</td>");
-					document.write("<td>" + '{{ item.1 }}' + "</td>");
-					if ("{{ item.2 }}" == "False"){
-						document.write("<td>" + "Open" + "</td>");
-						document.write("<td><button type=\"submit\" name = \"close\" value =\"{{ item.3 }}\"  class=\"btn btn-danger btn-xs col-md-4\">Close</button></td>");
-					}
-					else{
-						document.write("<td>" + "Closed" + "</td>");
-						document.write("<td>");
-						document.write("<button type=\"button\" class=\"btn btn-success btn-xs col-md-4\">&nbspEdit&nbsp</button>");
-						document.write("<div class=\"col-md-1\"></div>");
-						document.write("<button type=\"button\" class=\"btn btn-primary btn-xs col-md-4\">Publish</button>");
-						document.write("</td>");
-					}
-					//document.write("<td>" + '{{ item.2 }}' + "</td>");
-					//document.write("<td>" + + "</td>");
-					document.write("");
-					document.write("</tr>");
-					document.write("");
-				</script>
-				{% endfor %}
-			</tbody>
+			<form method = "POST" action={% url "quest:home" %} target = "_self" >
+				<tbody>
+					{% for item in created_quest %}
+					<tr>
+						<td>{{ item.id }}</td>
+						<td>{{ item.title }}</td>
+						{% if item.released %}
+							{% if item.closed %}
+							<td>Closed</td>
+							<td><button type="submit" name = "reopen" value ="{{ item.id }}"  class="btn btn-warning btn-xs col-md-4">Reopen</button></td>
+							{% else %}
+							<td>Published</td>
+							<td><button type="submit" name = "close" value ="{{ item.id }}"  class="btn btn-danger btn-xs col-md-4">Close</button></td>	
+							{% endif %}
+						{% else %}
+						<td>Draft</td>
+						<td><button type="button" class="btn btn-success btn-xs col-md-4">Edit</button>
+						<div class="col-md-1"></div>
+						<button type="submit" name = "publish" value ="{{ item.id }}" class="btn btn-primary btn-xs col-md-4">Publish</button></td>
+						{% endif %}
+					</tr>
 		</table>
-	</form>
+	
 </div>
 
 <div class="panel panel-default">
 	<div class="panel-heading">Filled Questionnaires</div>
-	<!-- Table -->
+	
 	<table class="table">
 		<thead>
 			<tr>
@@ -59,23 +51,19 @@
 		</thead>
 		<tbody>
 			{% for item in filled_quest %}
-			<script type="text/javascript">
-				document.write("<tr>");
-				document.write("<td>" + '{{ item.0 }}' + "</td>");
-				document.write("<td>" + '{{ item.1 }}' + "</td>");
-				if ("{{ item.2 }}" == "False"){
-					document.write("<td>" + "Open" + "</td>");
-				}
-				else{
-					document.write("<td>" + "Closed" + "</td>");
-				}
-				document.write("<td>");
-				document.write("<button type=\"button\" class=\"btn btn-info btn-xs col-md-4\">View</button>");
-				document.write("</td>");
-				document.write("</tr>");
-			</script>
+			<tr>
+				<td>{{ item.id }}</td>
+				<td>{{ item.title }}</td>
+				{% if item.closed %}
+				<td>Closed</td>
+				{% else %}
+				<td>Open</td>
+				{% endif %}
+				<td><button type="button" class="btn btn-info btn-xs col-md-4">View</button></td>
+			</tr>
 			{% endfor %}
 		</tbody>
 	</table>
+	
 </div>
 {% endblock %}

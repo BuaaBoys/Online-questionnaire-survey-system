@@ -13,10 +13,20 @@ def answer(request, qid):
 		Naire = Questions()
 		Naire.clean()
 		Naire.qid = qid
-		print 'questions:', len(Naire.questionList)
+		#print 'questions:', len(Naire.questionList)
 		q = get_object_or_404(Questionnaire, pk=qid)
+		if q.closed or not q.released:
+			raise Exception()
+
+		auth = Authentication(request)
+		user = auth.get_user()
+		rts = Result.objects.filter(questionnaire_id=qid)
+		for r in rts:
+			if r.participant_id == user.email:
+				return render(request, "homepage/message.html", {"message": AlertMessage("warning", "Don't answer same naire twice!", "You've already answered this Questionnaire", "/"),})
+		
 		Naire.read(q.contents)
-		print 'questions:', len(Naire.questionList)
+		#print 'questions:', len(Naire.questionList)
 		return render(request, 'results/answer.html' ,{'Questionnaire':q ,'naire':Naire ,'qid':qid})
 	except:
 		return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "xxxx", "/"),})
@@ -51,7 +61,7 @@ def publish(request, qid):
 			user = "anonymity@admin.com"
 
 		Questionnaire_answered = Questionnaire.objects.get(pk=qid)
-		r = Result(questionnaire_id=Questionnaire_answered,participant_id=user,answer=str(result))
+		r = Result(questionnaire_id=Questionnaire_answered,participant_id=user.email,answer=str(result))
 		#print str(result)
 		r.save()
 		return render(request, "homepage/message.html", {"message": AlertMessage("success", "Success!", "You have already posted your answers", "/naire"+str(qid)+"/results"),})
@@ -67,7 +77,7 @@ def success(request):
 	return render(request, "homepage/message.html", {"message": AlertMessage("success", "Success!", "You have already posted your answers", "/results/results"),})
 
 def error404(request):
-	return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "xxxx", "/"),})
+	return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "Wrong place you've got", "/"),})
 
 def result(request, qid):
 	try:
@@ -76,6 +86,8 @@ def result(request, qid):
 		Naire.qid = qid
 		Naire.read(get_object_or_404(Questionnaire, pk=qid).contents)
 		q = get_object_or_404(Questionnaire, pk=qid)
+		if not q.released:
+			raise Exception()
 		rts = Result.objects.filter(questionnaire_id=qid)
 
 		# Start doing data collection
@@ -115,4 +127,4 @@ def result(request, qid):
 		print dataset
 		return render(request, 'results/results.html' ,{'Questionnaire':q ,'naire':Naire ,'qid':qid ,'result':dataset ,'count':count,})
 	except:
-		return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "xxxx", "/"),})
+		return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "Wrong Place you've got", "/"),})

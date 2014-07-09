@@ -39,6 +39,18 @@ class Authentication():
 		else:
 			return True
 
+	'''
+	def set_filled(self):
+		"""
+		Set a mark in cookie when user filled a questionnaire
+		"""
+		response.set_signed_cookie("filled", 1, max_age = (365*24*3600)))
+
+	def is_filled(self):
+		"""
+		If the user has filled the questionnaire
+		"""
+	'''
 
 
 		

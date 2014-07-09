@@ -94,6 +94,12 @@ def close_or_open(request):
 			quest.closed = True
 			quest.save()
 
+		elif request.POST.has_key("publish"):
+			re = int(request.POST["publish"])
+			quest = Questionnaire.objects.filter(id = re)[0]
+			quest.released = True
+			quest.save()
+
 def manage_all(request):
 	auth = Authentication(request)
 	if not auth.is_login():
@@ -110,13 +116,13 @@ def manage_all(request):
 	filled_num = 1
 
 	for quest in pub_questionnaires:
-		created_quest.append((created_num, quest.title, quest.closed,quest.id))
+		created_quest.append(quest)
 		created_num += 1
 		if created_num > 5:
 			break
 	for result in results:
-		quest = Questionnaire.objects.get(id = result.questionnaire_id)
-		filled_quest.append((filled_num, quest.title, quest.closed))
+		quest = Questionnaire.objects.get(id = result.questionnaire_id.id)
+		filled_quest.append(quest)
 		filled_num += 1
 		if filled_num > 5:
 			break
@@ -139,7 +145,7 @@ def manage_filled(request, page):
 		last_result_index = 10 * (page - 1) + 10
 	filled_quest = []
 	for index in range(10 * (page - 1), last_result_index):
-		quest = Questionnaire.objects.get(id = results[index].questionnaire_id)
+		quest = Questionnaire.objects.get(id = results[index].questionnaire_id.id)
 		filled_quest.append((quest.id, quest.title, quest.subject, quest.description, quest.closed))
 	context = RequestContext(request, {"filled_quest": filled_quest, "current_page": page, "max_page": max_page}, processors = [manage_proc])
 	return render(request, "investmanager/filled_quest.html", context)
@@ -174,7 +180,7 @@ def manage_dashboard(request, type, page):
 	quest_list = []
 	if type == "filled":
 		for index in range(first_result_index, len(results)-1-(page-1)*10):
-			quest = Questionnaire.objects.get(id = results[index].questionnaire_id)
+			quest = Questionnaire.objects.get(id = results[index].questionnaire_id.id)
 			quest_list.append(quest)
 		context = RequestContext(request, {'quest_list':quest_list, "current_page": page, "max_page": max_page}, processors = [manage_proc])
 		return render(request, "investmanager/filled_quest.html", context)

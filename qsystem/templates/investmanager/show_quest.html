@@ -1,13 +1,14 @@
-<!doctype html>
-<html lang="zh-CN">
-<head>
-	<meta charset="UTF-8">
-	<title>显示</title>
-</head>
-<body>
-	<p>{{ id }}</p>
-	<p>{{ title }}</p>
-	<p>{{ subject }}</p>
-	<p>{{ description }}</p>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %}Add Questionnaire{% endblock %}
+{% block body %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-1"></div>
+		<div class="col-md-10">
+			<h3><strong>Congratulations!</strong><small> You've already created question {{ title }}</small> </h3>
+			<p>Check <a href="./home">Manage</a> to manage this question</p>
+			<p>If you have also published this questionnaire, check <a href="../naire{{id}}">naire</a> to see this questionnaire</p>
+		</div>
+	</div>
+</div>
+{% endblock %}
