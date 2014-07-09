@@ -1,8 +1,8 @@
 {% extends 'quest_base.html' %}
 {% block title %}Manage{% endblock %}
 {% block content %}
-<div class="panel panel-default">
-	<div class="panel-heading">Created Questionnaires</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">Created Questionnaires</div>
 		<table class="table">
 			<thead>
 				<tr>
@@ -15,56 +15,65 @@
 			<form method = "POST" action={% url "quest:home" %} target = "_self" >
 				<tbody>
 					{% for item in created_quest reversed%}
+						<tr>
+							<td>{{ item.id }}</td>
+							<td>{{ item.title }}</td>
+							{% if item.released %}
+								{% if item.closed %}
+									<td>Closed</td>
+									<td><button type="submit" name = "reopen" value ="{{ item.id }}"  class="btn btn-warning btn-xs col-md-4">Reopen</button></td>
+							{% else %}
+									<td>Published</td>
+									<td><button type="submit" name = "close" value ="{{ item.id }}"  class="btn btn-danger btn-xs col-md-4">Close</button></td>	
+							{% endif %}
+							{% else %}
+							<td>Draft</td>
+							<td><button type="button" class="btn btn-success btn-xs col-md-4">Edit</button>
+								<div class="col-md-1"></div>
+								<button type="submit" name = "publish" value ="{{ item.id }}" class="btn btn-primary btn-xs col-md-4">Publish</button></td>
+							{% endif %}
+						</tr>
+					{% endfor %}
+		</table>
+		
+	</div>
+
+	<div class="panel panel-default">
+		<div class="panel-heading">Filled Questionnaires</div>
+		
+		<table class="table">
+			<thead>
+				<tr>
+					<th class="col-lg-1">#</th>
+					<th class="col-lg-6">Titile</th>
+					<th class="col-lg-2">Status</th>
+					<th class="col-lg-3">Result</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for item in filled_quest reversed%}
 					<tr>
 						<td>{{ item.id }}</td>
 						<td>{{ item.title }}</td>
-						{% if item.released %}
-							{% if item.closed %}
+						{% if item.closed %}
 							<td>Closed</td>
-							<td><button type="submit" name = "reopen" value ="{{ item.id }}"  class="btn btn-warning btn-xs col-md-4">Reopen</button></td>
 							{% else %}
-							<td>Published</td>
-							<td><button type="submit" name = "close" value ="{{ item.id }}"  class="btn btn-danger btn-xs col-md-4">Close</button></td>	
+							<td>Open</td>
 							{% endif %}
-						{% else %}
-						<td>Draft</td>
-						<td><button type="button" class="btn btn-success btn-xs col-md-4">Edit</button>
-						<div class="col-md-1"></div>
-						<button type="submit" name = "publish" value ="{{ item.id }}" class="btn btn-primary btn-xs col-md-4">Publish</button></td>
-						{% endif %}
+							<td><button type="button" class="btn btn-info btn-xs col-md-4">View</button></td>
 					</tr>
 					{% endfor %}
+			</tbody>
 		</table>
-	
-</div>
-
-<div class="panel panel-default">
-	<div class="panel-heading">Filled Questionnaires</div>
-	
-	<table class="table">
-		<thead>
-			<tr>
-				<th class="col-lg-1">#</th>
-				<th class="col-lg-6">Titile</th>
-				<th class="col-lg-2">Status</th>
-				<th class="col-lg-3">Result</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for item in filled_quest reversed%}
-			<tr>
-				<td>{{ item.id }}</td>
-				<td>{{ item.title }}</td>
-				{% if item.closed %}
-				<td>Closed</td>
-				{% else %}
-				<td>Open</td>
-				{% endif %}
-				<td><button type="button" class="btn btn-info btn-xs col-md-4">View</button></td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-	
-</div>
+		
+	</div>
+	<script type="text/javascript">
+	 function close_or_reopen(obj, id) {
+		 var src = "{% url 'quest:toggle_close' "abc" "123" %}".
+			   replace("abc", obj.value).replace(123, id);
+		 $.getJSON(src, function(data) {
+			 alert(data.status);
+		 });
+	 }
+	</script>
 {% endblock %}

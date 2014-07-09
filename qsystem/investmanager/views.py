@@ -220,8 +220,8 @@ def modify_quest(request, no):
 	
 	return render(request, 'investmanager/modify_quest.html', {'id':id, 'title':title, 'subject':subject, 'description':description, 'questions':questions.questionList},)
 
-def toogle_close(request, oldStatus, no):
-	'''toogle the closed status of a questionnaire '''
+def toggle_close(request, oldStatus, no):
+	'''toggle the closed status of a questionnaire '''
 
 	nowStatus = ''
 	if oldStatus == 'open':
@@ -229,14 +229,14 @@ def toogle_close(request, oldStatus, no):
 		quest.closed = False
 		quest.save()
 		print 'closed:', quest.closed
-		nowStatus = "{\"status\": \"close\"}"
+		nowStatus = {"status": "close"}
 
 	elif oldStatus == 'close':
 		quest = Questionnaire.objects.filter(id = int(no))[0]
 		quest.closed = True
 		quest.save()
 		print 'closed:', quest.closed
-		nowStatus = "{\"status\":\"open\"}"
+		nowStatus = {"status":"open"}
 
 
 	data = simplejson.dumps(nowStatus, ensure_ascii = False)
