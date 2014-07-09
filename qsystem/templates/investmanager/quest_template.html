@@ -1,7 +1,7 @@
 {% extends 'quest_base.html' %}
 {% block title %}Add Questionnaire{% endblock %}
 {% block content %}
-<form method = "POST" action = {%url "quest:cao" type current_page %} target = "_self" >
+<form method = "POST" action = {%url "quest:dashboard" type current_page %} target = "_self" >
 	{% for item in quest_list reversed %}
 		<div class="panel panel-default">
 			<div class="panel-heading">

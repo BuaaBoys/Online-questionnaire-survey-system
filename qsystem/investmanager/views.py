@@ -93,73 +93,6 @@ def close_or_open(request):
 			quest.closed = True
 			quest.save()
 
-def created(request, page):
-	'''go to the created_quest page'''
-	auth = Authentication(request)
-	current_user = auth.get_user()
-	#current_email = user.email
-
-	close_or_open(request)
-
-	page = int(page)
-	results = Questionnaire.objects.filter(author = current_user)
-	max_page =int(math.ceil(len(results)/10.0))
-	if page > max_page:
-		raise Http404
-	if page == max_page:
-		last_result_index = len(results)
-	else:
-		last_result_index = 10 * (page - 1) + 10
-	cre_quest = []
-	cre_quest = results[10*(page-1): last_result_index]
-	context = RequestContext(request, {'quest_list':cre_quest, 'current_page':page, 'max_page':max_page, }, processors = [manage_proc])
-	return render(request, "investmanager/created_quest.html", context)
-
-def published(request, page):
-	'''go to the published_quest page'''
-
-	auth = Authentication(request)
-	current_user = auth.get_user()
-	#current_email = user.email
-
-	close_or_open(request)
-
-	page = int(page)
-	results = Questionnaire.objects.filter(author = current_user,released = True)
-	max_page =int(math.ceil(len(results)/10.0))
-	if page > max_page:
-		raise Http404
-	if page == max_page:
-		last_result_index = len(results)
-	else:
-		last_result_index = 10 * (page - 1) + 10
-	pub_quest = []
-	pub_quest = results[10*(page-1): last_result_index]
-
-	context = RequestContext(request, {'quest_list':pub_quest, 'current_page':page, 'max_page':max_page, }, processors = [manage_proc])
-	return render(request, "investmanager/published_quest.html", context)
-
-def draft(request, page):
-	'''go to the draft_quest page'''
-
-	auth = Authentication(request)
-	current_user = auth.get_user()
-	#current_email = user.email
-	page = int(page)
-	results = Questionnaire.objects.filter(author = current_user,released = False)
-	max_page =int(math.ceil(len(results)/10.0))
-
-	if page > max_page:
-		raise Http404
-	if page == max_page:
-		last_result_index = len(results)
-	else:
-		last_result_index = 10 * (page - 1) + 10
-	draft_quest = []
-	draft_quest = results[10*(page-1): last_result_index]
-	context = RequestContext(request, {'quest_list':draft_quest, 'current_page':page, 'max_page':max_page,}, processors = [manage_proc])
-	return render(request, "investmanager/draft_quest.html", context)
-
 def manage_all(request):
 	auth = Authentication(request)
 	if not auth.is_login():
@@ -210,7 +143,7 @@ def manage_filled(request, page):
 	context = RequestContext(request, {"filled_quest": filled_quest, "current_page": page, "max_page": max_page}, processors = [manage_proc])
 	return render(request, "investmanager/filled_quest.html", context)
 
-def manage_cao(request, type, page):
+def manage_dashboard(request, type, page):
 	page = int(page)
 	auth = Authentication(request)
 	if not auth.is_login():
@@ -228,6 +161,9 @@ def manage_cao(request, type, page):
 	else:
 		raise Http404
 	max_page =int(math.ceil(len(results)/10.0))
+	if len(results) == 0:
+		max_page = 1
+	print max_page
 	if page > max_page:
 		raise Http404
 	if page == max_page:

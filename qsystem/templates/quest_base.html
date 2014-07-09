@@ -8,9 +8,9 @@
 		<div class="col-lg-3">
 			<h3>Questionnaires</h3>
 			<ul class="list-group">
-				<li class="list-group-item"><a href={%url "quest:cao" "created" 1 %}>Created</a><span class="badge">{{ created_num }}</span></li>
-				<li class="list-group-item"><a href={%url "quest:cao" "published" 1 %}>Published</a><span class="badge">{{ published_num }}</span></li>
-				<li class="list-group-item"><a href={%url "quest:cao" "draft" 1 %}>Draft</a><span class="badge">{{ draft_num }}</span></li>
+				<li class="list-group-item"><a href={%url "quest:dashboard" "created" 1 %}>Created</a><span class="badge">{{ created_num }}</span></li>
+				<li class="list-group-item"><a href={%url "quest:dashboard" "published" 1 %}>Published</a><span class="badge">{{ published_num }}</span></li>
+				<li class="list-group-item"><a href={%url "quest:dashboard" "draft" 1 %}>Draft</a><span class="badge">{{ draft_num }}</span></li>
 				<li class="list-group-item"><a href="/quest/filled/1">Filled</a><span class="badge">{{ filled_num }}</span></li>
 			</ul>
 			<h3>Profile</h3>
@@ -31,29 +31,31 @@
 			{% block content %}{% endblock %}
 			<ul class="pagination">
 			<script type="text/javascript">
-				if ({{ current_page }} != 1){
-					document.write("<li><a href=\""+ ({{ current_page }} - 1) +"\">&laquo;</a></li>");
-				}
-				else{
-					document.write("<li class=\"disabled\"><a href=\"#\">&laquo;</a></li>");
-				}
-				var page = 0;
-				for (page = 1; page <= {{ max_page }}; page++){
-					if ({{ current_page }} != page){
-						document.write("<li><a href=\""+ page +"\">"+ page +"</a></li>");
+				if ({{ max_page }} !=  1){
+					if ({{ current_page }} != 1){
+						document.write("<li><a href=\""+ ({{ current_page }} - 1) +"\">&laquo;</a></li>");
 					}
 					else{
-						document.write("<li class=\"active\"><a href=\"#\">"+ page +"</a></li>");
+						document.write("<li class=\"disabled\"><a href=\"#\">&laquo;</a></li>");
 					}
-					document.write("");
-					document.write("");
-					document.write("");
-				}
-				if ({{ current_page }} != {{ max_page }}){
-					document.write("<li><a href=\""+ ({{ current_page }} + 1) +"\">&raquo;</a></li>");
-				}
-				else{
-					document.write("<li class=\"disabled\"><a href=\"#\">&raquo;</a></li>");
+					var page = 0;
+					for (page = 1; page <= {{ max_page }}; page++){
+						if ({{ current_page }} != page){
+							document.write("<li><a href=\""+ page +"\">"+ page +"</a></li>");
+						}
+						else{
+							document.write("<li class=\"active\"><a href=\"#\">"+ page +"</a></li>");
+						}
+						document.write("");
+						document.write("");
+						document.write("");
+					}
+					if ({{ current_page }} != {{ max_page }}){
+						document.write("<li><a href=\""+ ({{ current_page }} + 1) +"\">&raquo;</a></li>");
+					}
+					else{
+						document.write("<li class=\"disabled\"><a href=\"#\">&raquo;</a></li>");
+					}
 				}
 			</script>
 			</ul>
