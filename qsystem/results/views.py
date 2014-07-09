@@ -20,16 +20,33 @@ def answer(request, qid):
 
 		auth = Authentication(request)
 		user = auth.get_user()
-		rts = Result.objects.filter(questionnaire_id=qid)
-		for r in rts:
-			if r.participant_id == user.email:
-				return render(request, "homepage/message.html", {"message": AlertMessage("warning", "Don't answer same naire twice!", "You've already answered this Questionnaire", "/"),})
+
+		if q.anonymous_limit and user == None:
+			raise Exception()
+		elif user != None:
+			if q.permitobjects_limit != '[]':
+				limitlist = eval(q.permitobjects_limit)
+				if user.email in limitlist:
+					pass
+				else:
+					return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "You have no right to answer this questionnaire!", "/"),})
+			if q.forbidobjects_limit != '[]':
+				limitlist = eval(q.forbidobjects_limit)
+				if user.email not in limitlist:
+					pass
+				else:
+					return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "You have no right to answer this questionnaire!", "/"),})
+
+			rts = Result.objects.filter(questionnaire_id=qid)
+			for r in rts:
+				if r.participant_id == user.email:
+					return render(request, "homepage/message.html", {"message": AlertMessage("warning", "Don't answer same naire twice!", "You've already answered this Questionnaire", "/"),})
 		
 		Naire.read(q.contents)
 		#print 'questions:', len(Naire.questionList)
 		return render(request, 'results/answer.html' ,{'Questionnaire':q ,'naire':Naire ,'qid':qid})
 	except:
-		return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "xxxx", "/"),})
+		return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "Wrong place you've got.", "/"),})
 
 def publish(request, qid):
 	try:
@@ -77,7 +94,7 @@ def success(request):
 	return render(request, "homepage/message.html", {"message": AlertMessage("success", "Success!", "You have already posted your answers", "/results/results"),})
 
 def error404(request):
-	return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "Wrong place you've got", "/"),})
+	return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "Wrong place you've got.", "/"),})
 
 def result(request, qid):
 	try:
@@ -127,4 +144,4 @@ def result(request, qid):
 		print dataset
 		return render(request, 'results/results.html' ,{'Questionnaire':q ,'naire':Naire ,'qid':qid ,'result':dataset ,'count':count,})
 	except:
-		return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "Wrong Place you've got", "/"),})
+		return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "Wrong Place you've got.", "/"),})
