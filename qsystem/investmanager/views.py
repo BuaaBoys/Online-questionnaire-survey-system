@@ -100,6 +100,9 @@ def close_or_open(request):
 			quest.released = True
 			quest.save()
 
+		elif request.POST.has_key("edit"):
+			pass
+
 def manage_all(request):
 	auth = Authentication(request)
 	if not auth.is_login():
@@ -132,7 +135,7 @@ def manage_all(request):
 		filled_num += 1
 		if filled_num > 5:
 			break
-	context = RequestContext(request, {"created_quest": created_quest, "filled_quest": filled_quest}, processors = [manage_proc])
+	context = RequestContext(request, {"created_quest": created_quest, "filled_quest": filled_quest, "current_page": 1, "max_page": 1}, processors = [manage_proc])
 	return render(request, "investmanager/index.html", context)
 
 def manage_filled(request, page):
@@ -176,7 +179,6 @@ def manage_dashboard(request, type, page):
 	max_page =int(math.ceil(len(results)/10.0))
 	if len(results) == 0:
 		max_page = 1
-	print max_page
 	if page > max_page:
 		raise Http404
 	if page == max_page:

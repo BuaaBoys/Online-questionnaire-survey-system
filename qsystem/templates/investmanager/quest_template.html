@@ -7,21 +7,27 @@
 			<div class="panel-heading">
 				<div class="row">
 					{% if item.released %}
-					<div class="col-lg-11">{{ item.title }} <span class="glyphicon glyphicon-ok green"></span></div>
-					<div class="col-lg-1">
 						{% if item.closed %}
-						<button type = "submit" class = "btn btn-warning btn-xs" name = "reopen" value = "{{  item.id }}">Reopen</button>
+						<div class="col-lg-9"><span class="glyphicon glyphicon-lock"></span> {{ item.title }} </div>
+						<div class="col-lg-3">
+							<div class="col-md-1"></div>
+							<button type = "submit" class = "btn btn-warning btn-xs col-md-4" name = "reopen" value = "{{  item.id }}">Reopen</button>
 						{% else %}
-						<button type = "submit" class = "btn btn-danger btn-xs" name = "close" value = "{{  item.id }}">Close</button>
+						<div class="col-lg-9"><span class="glyphicon glyphicon-ok green"></span> {{ item.title }} </div>
+						<div class="col-lg-3">
+							<div class="col-md-1"></div>
+							<button type = "submit" class = "btn btn-danger btn-xs col-md-4" name = "close" value = "{{  item.id }}">Close</button>
 						{% endif %}
+						<div class="col-md-1"></div>
+						<button type = "submit" class = "btn btn-info btn-xs col-md-4" name = "view" value = "{{  item.id }}">View</button>
 					</div>
 					{% else %}
-					<div class="col-lg-10">{{ item.title }} </div>
-					<div class="col-lg-1">
-						<button type = "submit" class = "btn btn-success btn-xs" name = "edit" value = "{{  item.id }}">Edit</button>
-					</div>
-					<div class="col-lg-1">
-						<button type = "submit" class = "btn btn-primary btn-xs" name = "close" value = "{{  item.id }}">Publish</button>
+					<div class="col-lg-9"><span class="glyphicon glyphicon-pencil"></span> {{ item.title }} </div>
+					<div class="col-lg-3">
+						<div class="col-md-1"></div>
+						<button type = "submit" class = "btn btn-success btn-xs col-md-4" name = "edit" value = "{{  item.id }}">Edit</button>
+						<div class="col-md-1"></div>
+						<button type = "submit" class = "btn btn-primary btn-xs col-md-4" name = "publish" value = "{{  item.id }}">Publish</button>
 					</div>
 					{% endif %}
 				</div>
