@@ -197,3 +197,8 @@ def manage_dashboard(request, type, page):
 	context = RequestContext(request, {'quest_list':quest_list, 'current_page':page, 'max_page':max_page, 'type': type}, processors = [manage_proc])
 	return render(request, "investmanager/quest_template.html", context)
 
+def redirect_to_home(request):
+	return HttpResponseRedirect('home')
+
+def modify_quest(request, no):
+	return HttpResponseRedirect('../home')

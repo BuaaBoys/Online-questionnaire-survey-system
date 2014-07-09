@@ -34,7 +34,7 @@
                     if ('{{ custom_user.login }}'=='true'){
                         document.write("<ul class=\"nav navbar-nav navbar-right\">");
                         //document.write("<li><a href=\"#\">"+ docCookies.getItem('email').substr(1, docCookies.getItem('email').lastIndexOf("\"") - 1) +"</a></li>");
-                        document.write("<li><a href=\"/quest/home\">"+ '{{ custom_user.email }}' +"</a></li>");
+                        document.write("<li><a href={% url 'quest:home' %}>"+ '{{ custom_user.email }}' +"</a></li>");
                         document.write("<li><a href=\"javascript:logout()\">Logout</a></li>");
                         document.write("</ul>");
                         document.write("");
@@ -53,7 +53,7 @@
             </div>
         </div>
     </nav>
-    <form name="cookies" method="POST" action="/quest/" type="hidden">
+    <form name="cookies" method="POST" action={% url 'quest:create' %} type="hidden">
     </form>
 </head>
 <body>
