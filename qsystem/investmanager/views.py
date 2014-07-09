@@ -201,4 +201,22 @@ def redirect_to_home(request):
 	return HttpResponseRedirect('home')
 
 def modify_quest(request, no):
-	return HttpResponseRedirect('../home')
+	'''modify a quest'''
+
+	try:
+		no = int(no)
+		quest = Questionnaire.objects.get(id=no)
+	except:
+		raise Http404()
+
+	id = quest.id
+	title = quest.title
+	subject = quest.subject
+	description = quest.description
+	contents = quest.contents
+	questions = Questions()
+	questions.clean()
+	questions.read(contents)
+	
+	return render(request, 'investmanager/modify_quest.html', {'id':id, 'title':title, 'subject':subject, 'description':description, 'questions':questions.questionList},)
+

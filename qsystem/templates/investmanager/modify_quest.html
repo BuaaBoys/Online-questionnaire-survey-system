@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}modify quest{% endblock %}
+{% block body %}
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4"></div>
+			<div class="col-md-4">
+				<script src="{{ STATIC_URL }}js/scripts.js"></script>    
+				<form id="upload" name="quest" action="submit_modify/{{ id }}" method="post" onSubmit="return checkValid()">{% csrf_token %}
+					<div class="form-group">
+						<label>Title:</label>
+						<input type="text" class="form-control" name="title" maxlength="255" value="{{ title }}">
+					</div>
+					<div class="form-group">
+						<label>Subject:</label>
+						<input type="text" class="form-control" name="subject" maxlength="255" value="{{ subject }}">
+					</div>
+					<div class="form-group">
+						<label>Description:</label>
+						<textarea name="description" class="form-control" id="" cols="30" rows="10">{{ description }}</textarea>
+					</div>
+					{% for question in questions %}
+						<div class="question form-group" id="{{ question.qtype }}" no="{{ forloop.counter0 }}">
+							<input type="hidden" name="type" value="{{ question.qtype }}">
+							{% if question.qtype == 'single' %}
+								<p>{{ forloop.counter }}.Single Choice</p>
+							{% elif question.qtype == 'multiply' %}
+								<p>{{ forloop.counter }}.Multiply Choice</p>
+							{% elif question.qtype == 'judge' %}
+								<p>{{ forloop.counter }}.Judge</p>
+							{% else %}
+								<p>{{ forloop.counter }}.Essay</p>
+							{% endif %}
+							<textarea class="form-control" name="question">{{ question.content }}</textarea>
+							<input type="button" class="delItem btn btn-danger btn-xs" onclick="deleteQuestion(this)" value="Delete">
+							<a class="addItem btn btn-link btn-xs" onclick="addItem(this)">Add an item</a>
+							<a class="delItem btn btn-link btn-xs" onclick="deleteItem(this)">Delete items</a>
+							{% for item in question.items %}
+								<div class="item checkbox">
+									<input type="checkbox" class="checkbox checkbox-inline">
+									<label>No.{{ forloop.counter }}</label>
+									<input type="text" class="form-control" name="items{{ forloop.parentloop.counter0 }}" value="{{ item }}">
+								</div>
+							{% endfor %}
+						</div>
+					{% endfor %}
+					<div class="form-group" id="addQuestion">
+						<label>Question Type:</label>
+						<select class="form-control" id="select">
+							<option value="single" selected="selected">Single Choice</option>
+							<option value="multiply">Multiply Choice</option>
+							<option value="judge">Judge</option>
+							<option value="essay">Essay</option>
+						</select>
+						<a class="btn btn-link" onclick="addQuestion()">Add</a>
+					</div>
+					<input type="submit" class="btn btn-primary" value="Save Questionnaire">
+				</form>
+			</div>
+			<div class="col-md-4"></div>
+		</div>
+	</div>
+	
+{% endblock %}
