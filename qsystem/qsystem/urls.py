@@ -15,7 +15,7 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^accounts/', include('accounts.urls')),
+    url(r'^accounts/', include('accounts.urls', namespace='accounts')),
     url(r'^quest/', include('investmanager.urls', namespace='quest')),
     url(r'^naire', include('results.urls', namespace='results')),
 )

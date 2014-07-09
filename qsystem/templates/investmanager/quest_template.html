@@ -1,5 +1,5 @@
 {% extends 'quest_base.html' %}
-{% block title %}Add Questionnaire{% endblock %}
+{% block title %}Questionnaire Management{% endblock %}
 {% block content %}
 <form method = "POST" action = {%url "quest:dashboard" type current_page %} target = "_self" >
 	{% for item in quest_list reversed %}
@@ -22,7 +22,7 @@
 						<button type = "submit" class = "btn btn-info btn-xs col-md-4" name = "view" value = "{{  item.id }}">View</button>
 					</div>
 					{% else %}
-					<div class="col-lg-9"><span class="glyphicon glyphicon-pencil"></span> {{ item.title }} </div>
+					<div class="col-lg-9"><span class="glyphicon glyphicon-edit"></span> {{ item.title }} </div>
 					<div class="col-lg-3">
 						<div class="col-md-1"></div>
 						<button type = "submit" class = "btn btn-success btn-xs col-md-4" name = "edit" value = "{{  item.id }}">Edit</button>
