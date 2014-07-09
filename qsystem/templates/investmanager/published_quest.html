@@ -1,0 +1,50 @@
+{% extends 'quest_base.html' %}
+{% block title %}Add Questionnaire{% endblock %}
+{% block content %}
+
+	<script src="{{ STATIC_URL }}js/scripts.js"></script>
+	<form method = "POST" action = {%url "quest:published"  current_page %} target = "_self" >
+			{% for item in quest_list reversed %}
+
+			
+				{% if item.closed %}
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<div class="row">
+								<div class="col-lg-11">{{ item.title }} </div>
+								<div class="col-lg-1">
+									<button type = "submit" class = "btn btn-primary btn-xs" name = "reopen" value = "{{  item.id }}">Open</button>
+								</div>
+							</div>
+						</div>
+						<div class="panel-body">
+							Subject:{{ item.subject }}
+							<br>
+							<p>Description: {{ item.description }}</p>
+						</div>
+					</div>
+				{% else %}
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<div class="row">
+								<div class="col-lg-11">{{ item.title }} </div>
+								<div class="col-lg-1">
+									<button type = "submit" class = "btn btn-danger btn-xs" name = "close" value = "{{  item.id }}">Close</button>
+								</div>
+							</div>
+						</div>
+						<div class="panel-body">
+							Subject:{{ item.subject }}
+							<br>
+							<p>Description: {{ item.description }}</p>
+						</div>	
+					</div>
+				{% endif %}
+			
+
+			{% endfor %}
+		
+		
+	</form>
+
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'quest_base.html' %}
+{% block title %}Add Questionnaire{% endblock %}
+{% block content %}
+<form method = "POST" action = {%url "quest:cao" type current_page %} target = "_self" >
+	{% for item in quest_list reversed %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<div class="row">
+					{% if item.released %}
+					<div class="col-lg-11">{{ item.title }} </div>
+					<div class="col-lg-1">
+						{% if item.closed %}
+						<button type = "submit" class = "btn btn-warning btn-xs" name = "reopen" value = "{{  item.id }}">Open</button>
+						{% else %}
+						<button type = "submit" class = "btn btn-danger btn-xs" name = "close" value = "{{  item.id }}">Close</button>
+						{% endif %}
+					</div>
+					{% else %}
+					<div class="col-lg-10">{{ item.title }} </div>
+					<div class="col-lg-1">
+						<button type = "submit" class = "btn btn-success btn-xs" name = "edit" value = "{{  item.id }}">Edit</button>
+					</div>
+					<div class="col-lg-1">
+						<button type = "submit" class = "btn btn-primary btn-xs" name = "close" value = "{{  item.id }}">Publish</button>
+					</div>
+					{% endif %}
+				</div>
+			</div>
+			<div class="panel-body">
+				Subject:{{ item.subject }}
+				<br>
+				<p>Description: {{ item.description }}</p>
+			</div>
+		</div>
+	{% endfor %}
+</form>
+{% endblock %}

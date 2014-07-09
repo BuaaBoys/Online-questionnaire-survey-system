@@ -1,10 +1,11 @@
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse,HttpResponseRedirect
 from django.shortcuts import render,get_object_or_404,render_to_response
-from investmanager.models import Questionnaire 
+from investmanager.models import Questionnaire
 from qsystem.views import AlertMessage
 from results.models import Result
 from results.questions.questions import Questions
+from accounts.authentication import Authentication
 
 
 def answer(request, qid):
@@ -36,7 +37,7 @@ def publish(request, qid):
 					raise Exception()
 				m = []
 				for r in rlist:
-					m .append(r) 
+					m .append(r)
 				result.append(m)
 			elif Naire.questionList[x-1].qtype == 'judge':
 				result.append([str(request.POST[str(x)])])
@@ -44,8 +45,8 @@ def publish(request, qid):
 				if str(request.POST[str(x)]) !=  '' or str(request.POST[str(x)]) !=' ':
 					result.append([str(request.POST[str(x)])])
 
-		user = "anonymity@admin.com"
-		user = request.COOKIES.get("email")
+		auth = Authentication(request)
+		user = auth.get_user()
 		if user == None:
 			user = "anonymity@admin.com"
 
@@ -60,8 +61,8 @@ def publish(request, qid):
 		Naire.clean()
 		Naire.qid = qid
 		Naire.read(get_object_or_404(Questionnaire, pk=qid).contents)
-		return render(request, 'results/answer.html',{'Questionnaire':q ,'naire':Naire ,'qid':qid, 'errorMsg':'Not finished yet!'})	
-		
+		return render(request, 'results/answer.html',{'Questionnaire':q ,'naire':Naire ,'qid':qid, 'errorMsg':'Not finished yet!'})
+
 def success(request):
 	return render(request, "homepage/message.html", {"message": AlertMessage("success", "Success!", "You have already posted your answers", "/results/results"),})
 
@@ -76,7 +77,7 @@ def result(request, qid):
 		Naire.read(get_object_or_404(Questionnaire, pk=qid).contents)
 		q = get_object_or_404(Questionnaire, pk=qid)
 		rts = Result.objects.filter(questionnaire_id=qid)
-		
+
 		# Start doing data collection
 		# Dataset init
 		dataset = []

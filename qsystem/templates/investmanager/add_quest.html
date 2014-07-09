@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}添加问卷{% endblock %}
+{% block title %}Add Questionnaire{% endblock %}
 {% block body %}
 <div class="container">
 	<div class="row">
@@ -8,28 +8,29 @@
 		<script src="{{ STATIC_URL }}js/scripts.js"></script>    
 		<form id="upload" name="quest" action="publish" method="post" onSubmit="return checkValid()">{% csrf_token %}
 			<div class="form-group">
-				<label>问卷标题：</label>
+				<label>Title:</label>
 				<input type="text" class="form-control" name="title" maxlength="255">
 			</div>
 			<div class="form-group">
-				<label>调查对象：</label>
+				<label>Subject:</label>
 				<input type="text" class="form-control" name="subject" maxlength="255">
 			</div>
 			<div class="form-group">
-				<label>问卷描述：</label>
+				<label>Description:</label>
 				<textarea name="description" class="form-control" id="" cols="30" rows="10"></textarea>
 			</div>
 			<div class="form-group" id="addQuestion">
-				<label>问题类型：</label>
+				<label>Question Type:</label>
 				<select class="form-control" id="select">
-					<option value="single" selected="selected">单选题</option>
-					<option value="multiply">多选题</option>
-					<option value="judge">判断题</option>
-					<option value="essay">简答题</option>
+					<option value="single" selected="selected">Single Choice</option>
+					<option value="multiply">Multiply Choice</option>
+					<option value="judge">Judge</option>
+					<option value="essay">Essay</option>
 				</select>
-				<a class="btn btn-link" onclick="addQuestion()">添加</a>
+				<a class="btn btn-link" onclick="addQuestion()">Add</a>
 			</div>
-			<input type="submit" class="btn btn-primary" value="发布问卷">
+			<input type="submit" class="btn btn-primary" name = "input_action" value="Save Questionnaire">
+			<input type="submit" class="btn btn-primary" name = "input_action" value="Publish Questionnaire">
 		</form>
 		<p>{{ id }}</p>
 		</div>

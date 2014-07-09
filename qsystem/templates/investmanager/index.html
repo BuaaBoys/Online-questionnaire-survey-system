@@ -1,0 +1,81 @@
+{% extends 'quest_base.html' %}
+{% block title %}Manage{% endblock %}
+{% block content %}
+<div class="panel panel-default">
+	<!-- Default panel contents -->
+	<div class="panel-heading">Created Questionnaires</div>
+	<form method = "POST" target = "_self" >
+		<!-- Table -->
+		<table class="table">
+			<thead>
+				<tr>
+					<th class="col-lg-1">#</th>
+					<th class="col-lg-6">Titile</th>
+					<th class="col-lg-2">Status</th>
+					<th class="col-lg-3">Option</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for item in created_quest %}
+				<script type="text/javascript">
+					document.write("<tr>");
+					document.write("<td>" + '{{ item.0 }}' + "</td>");
+					document.write("<td>" + '{{ item.1 }}' + "</td>");
+					if ("{{ item.2 }}" == "False"){
+						document.write("<td>" + "Open" + "</td>");
+						document.write("<td><button type=\"submit\" name = \"close\" value =\"{{ item.3 }}\"  class=\"btn btn-danger btn-xs col-md-4\">Close</button></td>");
+					}
+					else{
+						document.write("<td>" + "Closed" + "</td>");
+						document.write("<td>");
+						document.write("<button type=\"button\" class=\"btn btn-success btn-xs col-md-4\">&nbspEdit&nbsp</button>");
+						document.write("<div class=\"col-md-1\"></div>");
+						document.write("<button type=\"button\" class=\"btn btn-primary btn-xs col-md-4\">Publish</button>");
+						document.write("</td>");
+					}
+					//document.write("<td>" + '{{ item.2 }}' + "</td>");
+					//document.write("<td>" + + "</td>");
+					document.write("");
+					document.write("</tr>");
+					document.write("");
+				</script>
+				{% endfor %}
+			</tbody>
+		</table>
+	</form>
+</div>
+
+<div class="panel panel-default">
+	<div class="panel-heading">Filled Questionnaires</div>
+	<!-- Table -->
+	<table class="table">
+		<thead>
+			<tr>
+				<th class="col-lg-1">#</th>
+				<th class="col-lg-6">Titile</th>
+				<th class="col-lg-2">Status</th>
+				<th class="col-lg-3">Result</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for item in filled_quest %}
+			<script type="text/javascript">
+				document.write("<tr>");
+				document.write("<td>" + '{{ item.0 }}' + "</td>");
+				document.write("<td>" + '{{ item.1 }}' + "</td>");
+				if ("{{ item.2 }}" == "False"){
+					document.write("<td>" + "Open" + "</td>");
+				}
+				else{
+					document.write("<td>" + "Closed" + "</td>");
+				}
+				document.write("<td>");
+				document.write("<button type=\"button\" class=\"btn btn-info btn-xs col-md-4\">View</button>");
+				document.write("</td>");
+				document.write("</tr>");
+			</script>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% endblock %}

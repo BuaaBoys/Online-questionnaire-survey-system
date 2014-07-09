@@ -11,7 +11,7 @@ def message(request, msg):
 	if msg == "registered":
 		message = AlertMessage("success", "Success!", " You are signed up, log in and see what you can do.", "/accounts/login")
 	if msg == "loginfirst":
-		message = AlertMessage("info", "Please log in first.", " A questionnaire can only be created by a signed in user.", "/accounts/login")
+		message = AlertMessage("info", "Please log in first.", " You are not allowed to view current page.", "/accounts/login")
 	return render(request, "homepage/message.html", {"message": message,})
 
 

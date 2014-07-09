@@ -26,4 +26,10 @@ class QuestForm(ModelForm):
 		contents = self.questions.build()
 		current_user = User.objects.get(email=current_user_email)
 		author = current_user
-		return Questionnaire.objects.create(title=title, subject=subject, description=description, contents=contents, author=author)
+		
+		released = False
+		if request.POST['input_action'] == "Publish Questionnaire":
+			released = True
+		#print released
+
+		return Questionnaire.objects.create(title=title, subject=subject, description=description, contents=contents, author=author,released =released,)

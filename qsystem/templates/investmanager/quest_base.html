@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}添加问卷{% endblock %}
+{% block body %}
+<div class="container">
+	<div class="page-header">
+		<h1>QSystem <small>Manage your questionnaires and information.</small></h1>
+	</div>
+	<div class="row">
+		<div class="col-lg-3">
+			<h3>Questionnaires</h3>
+			<ul class="list-group">
+				<li class="list-group-item">Published</li>
+				<li class="list-group-item">Filled</li>
+			</ul>
+			<h3>Profile</h3>
+			<ul class="list-group">
+			  <li class="list-group-item">Edit</li>
+			</ul>
+		</div>
+		<div class="col-lg-9">
+			<!--div class="panel panel-default">
+				<div class="panel-heading">Panel heading without title</div>
+				<div class="panel-body">
+					Subject: Panel content
+					<br>
+					Description: Dashen is haoren.
+				</div>
+			</div-->
+			{% block content %}{% endblock %}
+		</div>
+	</div>
+</div>
+{% endblock %}
