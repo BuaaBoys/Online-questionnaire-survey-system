@@ -78,24 +78,13 @@ def quest(request, no):
 
 	return render(request, "investmanager/show_quest.html",{"id":id, "title":title, "subject":subject, "description":description,})
 
-def manage(request):
-	'''go to the quest_manage page'''
-
-	auth = Authentication(request)
-	current_user = auth.get_user()
-	#current_email = user.email
-
-	quest_list = Questionnaire.objects.filter(author = current_user)
-
-	if request.method == "GET":
-		return render(request, "investmanager/manage_quest.html", {'quest_list':quest_list, })
-	else:
+def close_or_open(request):
+	if request.method == "POST":
 		if request.POST.has_key("reopen"):
 			re = int(request.POST["reopen"])
 			quest = Questionnaire.objects.filter(id = re)[0]
 			quest.closed = False
 			quest.save()
-
 
 		elif request.POST.has_key("close"):
 			re = int(request.POST["close"])
@@ -104,8 +93,30 @@ def manage(request):
 			quest.save()
 
 
-		return render(request, "investmanager/manage_quest.html", {'quest_list':quest_list, })
+def published(request):
+	'''go to the published_quest page'''
 
+	auth = Authentication(request)
+	current_user = auth.get_user()
+	#current_email = user.email
+
+	quest_list = Questionnaire.objects.filter(author = current_user,released = True)
+
+	close_or_open(request)
+
+	context = RequestContext(request, {'quest_list':quest_list, 'quest_len':len(quest_list)}, processors = [manage_proc])
+	return render(request, "investmanager/published_quest.html", context)
+
+def draft(request):
+	'''go to the draft_quest page'''
+
+	auth = Authentication(request)
+	current_user = auth.get_user()
+	#current_email = user.email
+
+	quest_list = Questionnaire.objects.filter(author = current_user, released = False)
+	context = RequestContext(request, {'quest_list':quest_list,}, processors = [manage_proc])
+	return render(request, "investmanager/draft_quest.html", context)
 
 def manage_all(request):
 	auth = Authentication(request)
@@ -114,12 +125,16 @@ def manage_all(request):
 	user = auth.get_user()
 	pub_questionnaires = Questionnaire.objects.filter(author = user)
 	results = Result.objects.filter(participant_id = user.email)
+
+	close_or_open(request)
+
 	created_quest = []
 	created_num = 1
 	filled_quest = []
 	filled_num = 1
+
 	for quest in pub_questionnaires:
-		created_quest.append((created_num, quest.title, quest.closed))
+		created_quest.append((created_num, quest.title, quest.closed,quest.id))
 		created_num += 1
 		if created_num >=5:
 			break
