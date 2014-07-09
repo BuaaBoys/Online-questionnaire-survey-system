@@ -12,28 +12,30 @@
 					<th class="col-lg-3">Option</th>
 				</tr>
 			</thead>
-			<form method = "POST" action={% url "quest:home" %} target = "_self" >
-				<tbody>
-					{% for item in created_quest reversed%}
-						<tr>
-							<td>{{ item.id }}</td>
-							<td>{{ item.title }}</td>
-							{% if item.released %}
-								{% if item.closed %}
-									<td>Closed</td>
-									<td><button type="submit" name = "reopen" value ="{{ item.id }}"  class="btn btn-warning btn-xs col-md-4">Reopen</button></td>
-							{% else %}
-									<td>Published</td>
-									<td><button type="submit" name = "close" value ="{{ item.id }}"  class="btn btn-danger btn-xs col-md-4">Close</button></td>	
-							{% endif %}
-							{% else %}
-							<td>Draft</td>
-							<td><button type="button" class="btn btn-success btn-xs col-md-4">Edit</button>
-								<div class="col-md-1"></div>
-								<button type="submit" name = "publish" value ="{{ item.id }}" class="btn btn-primary btn-xs col-md-4">Publish</button></td>
-							{% endif %}
-						</tr>
-					{% endfor %}
+			<tbody id="created_list">
+				{% for item in created_quest reversed%}
+					<tr>
+						<td>{{ item.id }}</td>
+						<td>{{ item.title }}</td>
+						{% if item.released %}
+							{% if item.closed %}
+								<td id="status{{ item.id }}">Closed</td>
+								<td><button name="reopen" value="{{ item.id }}" onclick="toggle(this)" class="btn btn-warning btn-xs col-md-4">Reopen</button></td>
+						{% else %}
+								<td id="status{{ item.id }}">Open</td>
+								<td><button name="close" value="{{ item.id }}" onclick="toggle(this)" class="btn btn-danger btn-xs col-md-4">Close</button></td>	
+						{% endif %}
+						{% else %}
+						<td id="status{{ item.id }}">Draft</td>
+						<td>
+							<button name="publish" value="{{ item.id }}" onclick="toggle(this)" class="btn btn-primary btn-xs col-md-4">Publish</button>
+							<div class="col-md-1"></div>
+							<button name="edit" onclick="location.href='{% url 'quest:modify' item.id %}'" id="edit{{ item.id }}" class="btn btn-success btn-xs col-md-4">Edit</button>
+						</td>
+
+						{% endif %}
+					</tr>
+				{% endfor %}
 		</table>
 		
 	</div>
@@ -41,7 +43,7 @@
 	<div class="panel panel-default">
 		<div class="panel-heading">Filled Questionnaires</div>
 		
-		<table class="table">
+		<table class="table" id="filled">
 			<thead>
 				<tr>
 					<th class="col-lg-1">#</th>
@@ -57,22 +59,39 @@
 						<td>{{ item.title }}</td>
 						{% if item.closed %}
 							<td>Closed</td>
-							{% else %}
+						{% else %}
 							<td>Open</td>
-							{% endif %}
-							<td><button type="button" class="btn btn-info btn-xs col-md-4">View</button></td>
+						{% endif %}
+						<td><button type="button" class="btn btn-info btn-xs col-md-4">View</button></td>
 					</tr>
-					{% endfor %}
+				{% endfor %}
 			</tbody>
 		</table>
 		
 	</div>
 	<script type="text/javascript">
-	 function close_or_reopen(obj, id) {
-		 var src = "{% url 'quest:toggle_close' "abc" "123" %}".
-			   replace("abc", obj.value).replace(123, id);
+	 function toggle(obj) {
+		 var src = "{% url 'quest:toggle' "abc" "123" %}".
+			   replace("abc", obj.name).replace(123, obj.value);
 		 $.getJSON(src, function(data) {
-			 alert(data.status);
+			 //$("td.status:eq(-" + obj.value + ")")[0].innerText = data.status;
+			 $("#status" + obj.value)[0].innerText = data.status;
+			 if (data.status == "Closed") {
+				 obj.name = "reopen";
+				 obj.innerText = "Reopen";
+				 obj.setAttribute("class", "btn btn-warning btn-xs col-md-4");
+			 } else if (data.status == "Open") {
+				 if (obj.name == "publish") {
+					 $("#edit" + obj.value).remove();
+					 var publish_num = parseInt($("#badge_published").text());
+					 var draft_num = parseInt($("#badge_draft").text());
+					 $("#badge_published").text(publish_num + 1);
+					 $("#badge_draft").text(draft_num - 1);
+				 }
+				 obj.name = "close";
+				 obj.innerText = "Close";
+				 obj.setAttribute("class", "btn btn-danger btn-xs col-md-4");
+			 }
 		 });
 	 }
 	</script>

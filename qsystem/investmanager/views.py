@@ -9,6 +9,7 @@ from django.shortcuts import render,render_to_response
 from django.template import loader, RequestContext
 from django.utils import simplejson
 from django.core import serializers
+from django.core.urlresolvers import reverse
 from accounts.authentication import Authentication
 from accounts.models import User
 from models import Questionnaire
@@ -27,7 +28,9 @@ def show_quest_fill_page(request):
 	'''let investigator create the questionnaire'''
 	auth = Authentication(request)
 	if not auth.is_login():
-		return HttpResponseRedirect("/message/loginfirst")
+		# return HttpResponseRedirect("/message/loginfirst")
+		return HttpResponseRedirect(reverse('message', kwargs={'msg': "loginfirst"}))
+
 	return render(request, "investmanager/add_quest.html", {})
 
 def publish(request):
@@ -35,33 +38,12 @@ def publish(request):
 
 	when the button is pressed, the arguments will be passed.'''
 
-	for key in request.POST:
-		print request.POST.getlist(key)
-	questions = Questions()
-	questions.clean()
-	try:
-		questionTitles = request.POST.getlist('question')
-		questionTypes = request.POST.getlist('type')
-		# 根据post的信息构造Question，将Question加入Questions
-		# 太丑了救命
-		for i, qtitle in enumerate(questionTitles):
-			qtype = questionTypes[i]
-			qitems = []
-			if qtype == "single" or qtype == "multiply":
-				value = 'items' + str(i)
-				qitems = request.POST.getlist(value)
-			print qtitle, qtype, qitems
-			question = Question('', qtype, qtitle, qitems)
-			questions.addQuestion(question)
-	except Exception, e:
-		print e
+	questions = constructQuestions(request)
 	form = QuestForm(request.POST, questions)
 	if form.is_valid():
-		quest = form.save(request)
+		form.save(request)
 		questions.clean()
-		# this place manage the content to xml conversion, use the id which database automatic generate
-	#return HttpResponseRedirect(str(quest.id))
-	return HttpResponseRedirect("/quest/home")
+	return HttpResponseRedirect('home')
 
 
 def quest(request, no):
@@ -106,7 +88,9 @@ def close_or_open(request):
 def manage_all(request):
 	auth = Authentication(request)
 	if not auth.is_login():
-		return HttpResponseRedirect("/message/loginfirst")
+		# return HttpResponseRedirect("/message/loginfirst")
+		return HttpResponseRedirect(reverse('message', kwargs={'msg': "loginfirst"}))
+
 	user = auth.get_user()
 	pub_questionnaires = Questionnaire.objects.filter(author = user)
 	results = Result.objects.filter(participant_id = user.email)
@@ -142,7 +126,9 @@ def manage_filled(request, page):
 	page = int(page)
 	auth = Authentication(request)
 	if not auth.is_login():
-		return HttpResponseRedirect("/message/loginfirst")
+		# return HttpResponseRedirect("/message/loginfirst")
+		return HttpResponseRedirect(reverse('message', kwargs={'msg': "loginfirst"}))
+
 	user = auth.get_user()
 	results = Result.objects.filter(participant_id = user.email)
 	max_page =int(math.ceil(len(results)/10.0))
@@ -163,7 +149,8 @@ def manage_dashboard(request, type, page):
 	page = int(page)
 	auth = Authentication(request)
 	if not auth.is_login():
-		return HttpResponseRedirect("/message/loginfirst")
+		# return HttpResponseRedirect("/message/loginfirst")
+		return HttpResponseRedirect(reverse('message', kwargs={'msg': "loginfirst"}))
 	current_user = auth.get_user()
 	close_or_open(request)
 	if type == "filled":
@@ -198,7 +185,9 @@ def manage_dashboard(request, type, page):
 	return render(request, "investmanager/quest_template.html", context)
 
 def redirect_to_home(request):
-	return HttpResponseRedirect('home')
+	# return HttpResponseRedirect('home')
+	# a better way to write url
+	return HttpResponseRedirect(reverse('quest:home'))
 
 def modify_quest(request, no):
 	'''modify a quest'''
@@ -220,26 +209,63 @@ def modify_quest(request, no):
 	
 	return render(request, 'investmanager/modify_quest.html', {'id':id, 'title':title, 'subject':subject, 'description':description, 'questions':questions.questionList},)
 
-def toggle_close(request, oldStatus, no):
+def modify_confirm(request, no):
+	''' confirm a modify '''
+	try:
+		no = int(no)
+		quest = Questionnaire.objects.get(id=no)
+	except:
+		raise Http404()
+	quest.title = request.POST.getlist('title')[0]
+	quest.subject = request.POST.getlist('subject')[0]
+	quest.description = request.POST.getlist('description')[0]
+	questions = constructQuestions(request)
+	quest.contents = questions.build()
+	quest.save()
+	return HttpResponseRedirect(reverse('quest:home'))
+	
+
+def toggle_state(request, action, no):
 	'''toggle the closed status of a questionnaire '''
 
 	nowStatus = ''
-	if oldStatus == 'open':
+	if action == 'reopen' or action == 'publish':
 		quest = Questionnaire.objects.filter(id = int(no))[0]
 		quest.closed = False
+		quest.released = True
 		quest.save()
-		print 'closed:', quest.closed
-		nowStatus = {"status": "close"}
+		nowStatus = {"status": "Open"}
 
-	elif oldStatus == 'close':
+	elif action == 'close':
 		quest = Questionnaire.objects.filter(id = int(no))[0]
 		quest.closed = True
 		quest.save()
-		print 'closed:', quest.closed
-		nowStatus = {"status":"open"}
-
-
+		nowStatus = {"status":"Closed"}
+		
 	data = simplejson.dumps(nowStatus, ensure_ascii = False)
 	response = HttpResponse(data)
 	print response
 	return response
+
+def constructQuestions(request):
+	'''use a request infomation to construct a Questionnaire'''
+	
+	questions = Questions()
+	questions.clean()
+	try:
+		questionTitles = request.POST.getlist('question')
+		questionTypes = request.POST.getlist('type')
+		# 根据post的信息构造Question，将Question加入Questions
+		# 太丑了救命
+		for i, qtitle in enumerate(questionTitles):
+			qtype = questionTypes[i]
+			qitems = []
+			if qtype == "single" or qtype == "multiply":
+				value = 'items' + str(i)
+				qitems = request.POST.getlist(value)
+			print qtitle, qtype, qitems
+			question = Question('', qtype, qtitle, qitems)
+			questions.addQuestion(question)
+	except Exception, e:
+		print e
+	return questions

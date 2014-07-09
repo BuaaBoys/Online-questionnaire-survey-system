@@ -1,33 +1,32 @@
 {% extends 'quest_base.html' %}
 {% block title %}Questionnaire Management{% endblock %}
 {% block content %}
-<form method = "POST" action = {%url "quest:dashboard" type current_page %} target = "_self" >
 	{% for item in quest_list reversed %}
-		<div class="panel panel-default">
+		<div id="no{{ item.id }}" class="panel panel-default">
 			<div class="panel-heading">
 				<div class="row">
 					{% if item.released %}
 						{% if item.closed %}
-						<div class="col-lg-9"><span class="glyphicon glyphicon-lock"></span> {{ item.title }} </div>
+						<div class="col-lg-9"><span id="icon{{ item.id }}" class="glyphicon glyphicon-lock"></span> {{ item.title }} </div>
 						<div class="col-lg-3">
 							<div class="col-md-1"></div>
-							<button type = "submit" class = "btn btn-warning btn-xs col-md-4" name = "reopen" value = "{{  item.id }}">Reopen</button>
+							<button onclick="toggle(this)" class="btn btn-warning btn-xs col-md-4" name="reopen" value="{{ item.id }}">Reopen</button>
 						{% else %}
-						<div class="col-lg-9"><span class="glyphicon glyphicon-ok green"></span> {{ item.title }} </div>
+						<div class="col-lg-9"><span id="icon{{ item.id }}" class="glyphicon glyphicon-ok green"></span> {{ item.title }} </div>
 						<div class="col-lg-3">
 							<div class="col-md-1"></div>
-							<button type = "submit" class = "btn btn-danger btn-xs col-md-4" name = "close" value = "{{  item.id }}">Close</button>
+							<button onclick="toggle(this)" class="btn btn-danger btn-xs col-md-4" name="close" value="{{ item.id }}">Close</button>
 						{% endif %}
 						<div class="col-md-1"></div>
-						<button type = "submit" class = "btn btn-info btn-xs col-md-4" name = "view" value = "{{  item.id }}">View</button>
+						<button onclick="" class="btn btn-info btn-xs col-md-4" name="view" value="{{ item.id }}">View</button>
 					</div>
 					{% else %}
-					<div class="col-lg-9"><span class="glyphicon glyphicon-edit"></span> {{ item.title }} </div>
+					<div class="col-lg-9"><span id="icon{{ item.id }}" class="glyphicon glyphicon-edit"></span> {{ item.title }} </div>
 					<div class="col-lg-3">
 						<div class="col-md-1"></div>
-						<button type = "submit" class = "btn btn-success btn-xs col-md-4" name = "edit" value = "{{  item.id }}">Edit</button>
+						<button onclick="location.href='{% url 'quest:modify' item.id %}'" class="btn btn-success btn-xs col-md-4" name="edit" value="{{ item.id }}">Edit</button>
 						<div class="col-md-1"></div>
-						<button type = "submit" class = "btn btn-primary btn-xs col-md-4" name = "publish" value = "{{  item.id }}">Publish</button>
+						<button onclick="toggle(this)" class="btn btn-primary btn-xs col-md-4" name="publish" value="{{ item.id }}">Publish</button>
 					</div>
 					{% endif %}
 				</div>
@@ -39,5 +38,31 @@
 			</div>
 		</div>
 	{% endfor %}
-</form>
+	<script type="text/javascript">
+	 function toggle(obj) {
+		 var src = "{% url 'quest:toggle' "abc" "123" %}".
+			   replace("abc", obj.name).replace(123, obj.value);
+		 $.getJSON(src, function(data) {
+			 if (data.status == "Closed") {
+				 obj.name = "reopen";
+				 obj.innerText = "Reopen";
+				 obj.setAttribute("class", "btn btn-warning btn-xs col-md-4");
+				 $("#icon" + obj.value).attr("class", "glyphicon glyphicon-lock");
+			 } else if (data.status == "Open") {
+				 if (obj.name == "publish") {
+					 var publish_num = parseInt($("#badge_published").text());
+					 var draft_num = parseInt($("#badge_draft").text());
+					 $("#badge_published").text(publish_num + 1);
+					 $("#badge_draft").text(draft_num - 1);
+					 $("#no" + obj.value).remove();
+				 } else {
+					 obj.name = "close";
+					 obj.innerText = "Close";
+					 obj.setAttribute("class", "btn btn-danger btn-xs col-md-4");
+					 $("#icon" + obj.value).attr("class", "glyphicon glyphicon-ok green");
+				 }
+			 }
+		 });
+	 }
+	</script>
 {% endblock %}

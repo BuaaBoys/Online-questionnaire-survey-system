@@ -7,7 +7,7 @@
 			<div class="col-md-4"></div>
 			<div class="col-md-4">
 				<script src="{{ STATIC_URL }}js/scripts.js"></script>    
-				<form id="upload" name="quest" action="submit_modify/{{ id }}" method="post" onSubmit="return checkValid()">{% csrf_token %}
+				<form id="upload" name="quest" action="{% url 'quest:confirm' id %}" method="post" onSubmit="return checkValid()">{% csrf_token %}
 					<div class="form-group">
 						<label>Title:</label>
 						<input type="text" class="form-control" name="title" maxlength="255" value="{{ title }}">
