@@ -18,6 +18,7 @@ from results.models import Result
 
 from investmanager.context_processors import manage_proc
 import sys
+import math
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -136,13 +137,34 @@ def manage_all(request):
 	for quest in pub_questionnaires:
 		created_quest.append((created_num, quest.title, quest.closed,quest.id))
 		created_num += 1
-		if created_num >=5:
+		if created_num > 5:
 			break
 	for result in results:
 		quest = Questionnaire.objects.get(id = result.questionnaire_id)
 		filled_quest.append((filled_num, quest.title, quest.closed))
 		filled_num += 1
-		if filled_num >= 5:
+		if filled_num > 5:
 			break
 	context = RequestContext(request, {"created_quest": created_quest, "filled_quest": filled_quest}, processors = [manage_proc])
 	return render(request, "investmanager/index.html", context)
+
+def manage_filled(request, page):
+	page = int(page)
+	auth = Authentication(request)
+	if not auth.is_login():
+		return HttpResponseRedirect("/message/loginfirst")
+	user = auth.get_user()
+	results = Result.objects.filter(participant_id = user.email)
+	max_page =int(math.ceil(len(results)/10.0))
+	if page > max_page:
+		raise Http404
+	if page == max_page:
+		last_result_index = len(results)
+	else:
+		last_result_index = 10 * (page - 1) + 10
+	filled_quest = []
+	for index in range(10 * (page - 1), last_result_index):
+		quest = Questionnaire.objects.get(id = results[index].questionnaire_id)
+		filled_quest.append((quest.id, quest.title, quest.subject, quest.description, quest.closed))
+	context = RequestContext(request, {"filled_quest": filled_quest, "current_page": page, "max_page": max_page}, processors = [manage_proc])
+	return render(request, "investmanager/filled_quest.html", context)
