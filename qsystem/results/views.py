@@ -13,10 +13,12 @@ def answer(request, qid):
 		Naire = Questions()
 		Naire.clean()
 		Naire.qid = qid
-		print 'questions:', len(Naire.questionList)
+		#print 'questions:', len(Naire.questionList)
 		q = get_object_or_404(Questionnaire, pk=qid)
+		if q.contents:
+			pass
 		Naire.read(q.contents)
-		print 'questions:', len(Naire.questionList)
+		#print 'questions:', len(Naire.questionList)
 		return render(request, 'results/answer.html' ,{'Questionnaire':q ,'naire':Naire ,'qid':qid})
 	except:
 		return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "xxxx", "/"),})
@@ -51,7 +53,7 @@ def publish(request, qid):
 			user = "anonymity@admin.com"
 
 		Questionnaire_answered = Questionnaire.objects.get(pk=qid)
-		r = Result(questionnaire_id=Questionnaire_answered,participant_id=user,answer=str(result))
+		r = Result(questionnaire_id=Questionnaire_answered,participant_id=user.email,answer=str(result))
 		#print str(result)
 		r.save()
 		return render(request, "homepage/message.html", {"message": AlertMessage("success", "Success!", "You have already posted your answers", "/naire"+str(qid)+"/results"),})
