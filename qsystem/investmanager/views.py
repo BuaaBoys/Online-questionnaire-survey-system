@@ -107,6 +107,7 @@ def manage_all(request):
 	user = auth.get_user()
 	pub_questionnaires = Questionnaire.objects.filter(author = user)
 	results = Result.objects.filter(participant_id = user.email)
+	results.reverse()
 
 	close_or_open(request)
 
@@ -115,11 +116,16 @@ def manage_all(request):
 	filled_quest = []
 	filled_num = 1
 
-	for quest in pub_questionnaires:
-		created_quest.append(quest)
-		created_num += 1
-		if created_num > 5:
-			break
+	if len(pub_questionnaires) <=5 :
+		created_quest = pub_questionnaires[0: len(pub_questionnaires)]
+	else:
+		created_quest = pub_questionnaires[len(pub_questionnaires) - 5: len(pub_questionnaires)]
+
+	if len(results) <=5 :
+		results = results[0: len(results)]
+	else:
+		results = results[len(results) - 5: len(results)]
+
 	for result in results:
 		quest = Questionnaire.objects.get(id = result.questionnaire_id.id)
 		filled_quest.append(quest)
@@ -179,7 +185,7 @@ def manage_dashboard(request, type, page):
 		first_result_index = len(results)-10-(page-1)*10
 	quest_list = []
 	if type == "filled":
-		for index in range(first_result_index, len(results)-1-(page-1)*10):
+		for index in range(first_result_index, len(results)-(page-1)*10):
 			quest = Questionnaire.objects.get(id = results[index].questionnaire_id.id)
 			quest_list.append(quest)
 		context = RequestContext(request, {'quest_list':quest_list, "current_page": page, "max_page": max_page}, processors = [manage_proc])

@@ -14,7 +14,7 @@
 			</thead>
 			<form method = "POST" action={% url "quest:home" %} target = "_self" >
 				<tbody>
-					{% for item in created_quest %}
+					{% for item in created_quest reversed%}
 					<tr>
 						<td>{{ item.id }}</td>
 						<td>{{ item.title }}</td>
@@ -33,6 +33,7 @@
 						<button type="submit" name = "publish" value ="{{ item.id }}" class="btn btn-primary btn-xs col-md-4">Publish</button></td>
 						{% endif %}
 					</tr>
+					{% endfor %}
 		</table>
 	
 </div>
@@ -50,7 +51,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% for item in filled_quest %}
+			{% for item in filled_quest reversed%}
 			<tr>
 				<td>{{ item.id }}</td>
 				<td>{{ item.title }}</td>
