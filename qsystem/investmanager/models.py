@@ -15,3 +15,6 @@ class Questionnaire(models.Model):
 	date = models.DateTimeField(auto_now_add=True)
 	closed = models.BooleanField(default=False)
 	released = models.BooleanField(default=False)
+
+	def __unicode__(self):
+		return self.title

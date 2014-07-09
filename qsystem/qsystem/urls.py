@@ -17,5 +17,5 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('accounts.urls')),
     url(r'^quest/', include('investmanager.urls', namespace='quest')),
-    url(r'^naire', include('results.urls')),
+    url(r'^naire', include('results.urls', namespace='results')),
 )
