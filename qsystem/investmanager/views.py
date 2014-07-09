@@ -120,7 +120,7 @@ def manage_all(request):
 		if created_num > 5:
 			break
 	for result in results:
-		quest = Questionnaire.objects.get(id = result.questionnaire_id)
+		quest = Questionnaire.objects.get(id = result.questionnaire_id.id)
 		filled_quest.append(quest)
 		filled_num += 1
 		if filled_num > 5:
