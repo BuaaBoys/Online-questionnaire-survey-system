@@ -27,6 +27,34 @@
 
 			</div-->
 			{% block content %}{% endblock %}
+			<ul class="pagination">
+			<script type="text/javascript">
+				if ({{ current_page }} != 1){
+					document.write("<li><a href=\""+ ({{ current_page }} - 1) +"\">&laquo;</a></li>");
+				}
+				else{
+					document.write("<li class=\"disabled\"><a href=\"#\">&laquo;</a></li>");
+				}
+				var page = 0;
+				for (page = 1; page <= {{ max_page }}; page++){
+					if ({{ current_page }} != page){
+						document.write("<li><a href=\""+ page +"\">"+ page +"</a></li>");
+					}
+					else{
+						document.write("<li class=\"active\"><a href=\"#\">"+ page +"</a></li>");
+					}
+					document.write("");
+					document.write("");
+					document.write("");
+				}
+				if ({{ current_page }} != {{ max_page }}){
+					document.write("<li><a href=\""+ ({{ current_page }} + 1) +"\">&raquo;</a></li>");
+				}
+				else{
+					document.write("<li class=\"disabled\"><a href=\"#\">&raquo;</a></li>");
+				}
+			</script>
+			</ul>
 		</div>
 	</div>
 </div>
