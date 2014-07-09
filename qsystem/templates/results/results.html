@@ -7,9 +7,9 @@
 	<div class="col-md-12">
 		<div>
 		<div>
-		<ul class="nav nav-tabs" role="tablist">
+		<ul class="nav nav-tabs nav-justified" role="tablist">
 			<li class="active">
-				<a class="navbar-link" role="tab" data-toggle="tab" href="#index">基本信息</a>
+				<a class="navbar-link" role="tab" data-toggle="tab" href="#index">Info</a>
 			</li>
 		{% for i in result %}
 	        <li>
@@ -40,7 +40,7 @@
 				</blockquote>
 				<legend></legend>
 				<div>
-					<p class="text-right"><em>已收到{{count}}份答卷</em></p>
+					<p class="text-right"><em>{{count}} results received</em></p>
 				</div>
 				</div>
 
@@ -139,7 +139,7 @@
   		})
   		$('.dropdown-toggle').dropdown()
   		$('#myTab a').click(function (e) {
-			.preventDefault()
+			preventDefault()
 			$(this).tab('show')
 		})
 	</script>

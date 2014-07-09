@@ -67,7 +67,7 @@ def success(request):
 	return render(request, "homepage/message.html", {"message": AlertMessage("success", "Success!", "You have already posted your answers", "/results/results"),})
 
 def error404(request):
-	return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "xxxx", "/"),})
+	return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "Wrong place you've got", "/"),})
 
 def result(request, qid):
 	try:
@@ -115,4 +115,4 @@ def result(request, qid):
 		print dataset
 		return render(request, 'results/results.html' ,{'Questionnaire':q ,'naire':Naire ,'qid':qid ,'result':dataset ,'count':count,})
 	except:
-		return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "xxxx", "/"),})
+		return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "Wrong Place you've got", "/"),})

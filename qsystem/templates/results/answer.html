@@ -70,7 +70,7 @@
 						</label>
 					{% endif %}
 					{%if q.qtype == 'essay'%}
-						<input type="text" name="{{q.qid}}" id="choice{{forloop.counter}}" autofocus="autofocus"/>
+						<input type="text" name="{{q.qid}}" id="choice{{forloop.counter}}" autofocus="autofocus" class="form-control"/>
 					{% endif %}
 				</div>
 			{% endfor%}

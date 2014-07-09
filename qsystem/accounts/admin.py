@@ -4,8 +4,8 @@ from investmanager.models import Questionnaire
 
 
 class QuestionnaireAdmin(admin.ModelAdmin):
-    fields=['title','subject','description']
-    list_display = ('title','subject','description')
+	list_display = ('title','subject','description')
+	list_filter = ['date']
 
 admin.site.register(User)
 admin.site.register(Questionnaire, QuestionnaireAdmin)
