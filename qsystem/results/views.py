@@ -53,7 +53,36 @@ def publish(request, qid):
 		Naire = Questions()
 		Naire.clean()
  		Naire.qid = qid
-		Naire.read(get_object_or_404(Questionnaire, pk=qid).contents)
+
+ 		q = get_object_or_404(Questionnaire, pk=qid)		
+ 		if q.closed or not q.released:
+			raise Exception()
+
+		auth = Authentication(request)
+		user = auth.get_user()
+
+		if q.anonymous_limit and user == None:
+			raise Exception()
+		elif user != None:
+			if q.permitobjects_limit != '[]':
+				limitlist = eval(q.permitobjects_limit)
+				if user.email in limitlist:
+					pass
+				else:
+					return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "You have no right to answer this questionnaire!", "/"),})
+			if q.forbidobjects_limit != '[]':
+				limitlist = eval(q.forbidobjects_limit)
+				if user.email not in limitlist:
+					pass
+				else:
+					return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "You have no right to answer this questionnaire!", "/"),})
+
+			rts = Result.objects.filter(questionnaire_id=qid)
+			for r in rts:
+				if r.participant_id == user.email:
+					return render(request, "homepage/message.html", {"message": AlertMessage("warning", "Don't answer same naire twice!", "You've already answered this Questionnaire", "/"),})
+		
+		Naire.read(q.contents)
 		result = []
 		for x in xrange(1,Naire.count+1):
 			if Naire.questionList[x-1].qtype == 'single':
@@ -127,7 +156,7 @@ def result(request, qid):
 			elif Naire.questionList[x-1].qtype == 'essay':
 				dataset.append([])
 
-		print dataset
+		#print dataset
 		# ergodic
 		count = 0
 		for x in rts:
@@ -141,7 +170,7 @@ def result(request, qid):
 					dataset[list_count] += l
 				list_count += 1
 			count += 1
-		print dataset
+		#print dataset
 		return render(request, 'results/results.html' ,{'Questionnaire':q ,'naire':Naire ,'qid':qid ,'result':dataset ,'count':count,})
 	except:
 		return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "Wrong Place you've got.", "/"),})
