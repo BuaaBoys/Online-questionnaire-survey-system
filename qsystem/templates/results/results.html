@@ -161,7 +161,7 @@
 		{% for i in result %}
 		var ctx{{forloop.counter}} = document.getElementById("myChart{{forloop.counter}}").getContext("2d");
 		var data{{forloop.counter}} = {
-			labels : [{%for it in i %}"{{forloop.counter}}",{% endfor %}],
+			labels : [{%for it in i %}"Choice{{forloop.counter}}",{% endfor %}],
 			datasets : [
 				{
 					//label: "My Second dataset",

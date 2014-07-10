@@ -1,17 +1,16 @@
 {% extends 'base.html' %}
 {% block title %}Login{% endblock %}
 {% block body %}
-<body>
 <div class="container">
-	<div class="row">
 		<div class="col-md-8">
 			<div class="jumbotron">
 				<h1>QSystem </h1>
 				<p>Login QSystem and see what you can do.</p>
-				<button class="btn btn-primary btn-md" onlick="javascript:submit()">Register</button> Do not have an account? 
+				<a class="btn btn-primary btn-lg" href=".././register/" role="button">Register</a> Do not have an account? 
 			</div>
 		</div>
 		<div class="col-md-4">
+		<div class="panel-body">
 				<form role="form" method="post" action="{% url 'accounts:login_submit' %}">
 					{% csrf_token %}
 					<div class="form-group">
@@ -30,10 +29,9 @@
 					</div>
 				</form>
 		</div>
-	</div>
+		</div>
 </div>
 <script type="text/javascript">
 	//document.write("<p>"+ docCookies.getItem('email').substr(1, docCookies.getItem('email').lastIndexOf('\"') - 1) +"</p>")
 </script>
-</body>
 {% endblock %}
