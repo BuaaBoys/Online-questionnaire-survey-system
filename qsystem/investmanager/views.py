@@ -208,12 +208,14 @@ def modify_quest(request, no):
 
 	try:
 		no = int(no)
-		quest = Questionnaire.objects.get(id=no)
+		quest = Questionnaire.objects.get(id=no, author=auth.get_user())
 	except:
-		raise Http404()
-
-	if quest.closed or not quest.released:
+		# raise Http404()
 		return HttpResponseRedirect(reverse('message', kwargs={'msg': "errorpage"}))
+
+	if quest.released:
+		return HttpResponseRedirect(reverse('message', kwargs={'msg': "errorpage"}))
+
 	id = quest.id
 	title = quest.title
 	subject = quest.subject

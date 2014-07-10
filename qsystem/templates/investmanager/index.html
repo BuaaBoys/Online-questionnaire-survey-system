@@ -29,7 +29,7 @@
 										<p>Description: {{item.description}}</p>
 										<form>
 										<script type="text/javascript">
-											var url = document.location.host + "{% url 'results:result' item.id %}"
+											var url = document.location.host + "{% url 'results:answer' item.id %}"
 											document.write("<a href=\"{% url 'results:answer' item.id %}\">"+ url +"</a>")
 										</script>
 										</form>
