@@ -49,7 +49,7 @@ def answer(request, qid):
 		return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "Wrong place you've got.", "/"),})
 
 def publish(request, qid):
-	#try:
+	try:
 		Naire = Questions()
 		Naire.clean()
  		Naire.qid = qid
@@ -82,7 +82,7 @@ def publish(request, qid):
 		#print str(result)
 		r.save()
 		return render(request, "homepage/message.html", {"message": AlertMessage("success", "Success!", "You have already posted your answers", "/naire"+str(qid)+"/results"),})
-	#except:
+	except:
 		q = get_object_or_404(Questionnaire, pk=qid)
 		Naire = Questions()
 		Naire.clean()
