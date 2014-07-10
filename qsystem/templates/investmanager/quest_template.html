@@ -18,13 +18,13 @@
 							<button onclick="toggle(this)" class="btn btn-danger btn-xs col-md-4" name="close" value="{{ item.id }}">Close</button>
 						{% endif %}
 						<div class="col-md-1"></div>
-						<button onclick="" class="btn btn-info btn-xs col-md-4" name="view" value="{{ item.id }}">View</button>
+						<button onclick="location.href='{% url 'home' %}naire{{ item.id }}/results'" class="btn btn-info btn-xs col-md-4" name="view" value="{{ item.id }}">View</button>
 					</div>
 					{% else %}
 					<div class="col-lg-9"><span id="icon{{ item.id }}" class="glyphicon glyphicon-edit"></span> {{ item.title }} </div>
 					<div class="col-lg-3">
 						<div class="col-md-1"></div>
-						<button onclick="location.href='{% url 'quest:modify' item.id %}'" class="btn btn-success btn-xs col-md-4" name="edit" value="{{ item.id }}">Edit</button>
+						<button onclick="location.href='{% url 'naire:results' item.id %}'" class="btn btn-success btn-xs col-md-4" name="edit" value="{{ item.id }}">Edit</button>
 						<div class="col-md-1"></div>
 						<button onclick="toggle(this)" class="btn btn-primary btn-xs col-md-4" name="publish" value="{{ item.id }}">Publish</button>
 					</div>

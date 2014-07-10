@@ -85,7 +85,7 @@
 						{% else %}
 							<td>Open</td>
 						{% endif %}
-						<td><a href="{% url 'home' %}naire{{ item.id }}/results" class="btn btn-info btn-xs col-md-4">View</a></td>
+						<td><a href="{% url 'naire:results' item.id %}" class="btn btn-info btn-xs col-md-4">View</a></td>
 					</tr>
 				{% endfor %}
 			</tbody>
