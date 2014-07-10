@@ -26,6 +26,7 @@ sys.setdefaultencoding('utf8')
 
 def show_quest_fill_page(request):
 	'''let investigator create the questionnaire'''
+
 	auth = Authentication(request)
 	if not auth.is_login():
 		# return HttpResponseRedirect("/message/loginfirst")
@@ -36,8 +37,11 @@ def show_quest_fill_page(request):
 
 def publish(request):
 	'''pass basic infomation to next page
-
 	when the button is pressed, the arguments will be passed.'''
+
+	auth = Authentication(request)
+	if not auth.is_login():
+		return HttpResponseRedirect(reverse('message', kwargs={'msg': "loginfirst"}))	
 
 	questions = constructQuestions(request)
 	form = QuestForm(request.POST, questions)
@@ -46,9 +50,12 @@ def publish(request):
 		questions.clean()
 	return HttpResponseRedirect('home')
 
-
 def quest(request, no):
 	'''let people fill the questionnaire'''
+
+	auth = Authentication(request)
+	if not auth.is_login():
+		return HttpResponseRedirect(reverse('message', kwargs={'msg': "loginfirst"}))	
 
 	try:
 		no = int(no)
@@ -87,6 +94,7 @@ def close_or_open(request):
 			pass
 
 def manage_all(request):
+
 	auth = Authentication(request)
 	if not auth.is_login():
 		# return HttpResponseRedirect("/message/loginfirst")
@@ -97,7 +105,7 @@ def manage_all(request):
 	results = Result.objects.filter(participant_id = user.email)
 	results.reverse()
 
-	close_or_open(request)
+	# close_or_open(request)
 
 	created_quest = []
 	created_num = 1
@@ -124,6 +132,7 @@ def manage_all(request):
 	return render(request, "investmanager/index.html", context)
 
 def manage_filled(request, page):
+
 	page = int(page)
 	auth = Authentication(request)
 	if not auth.is_login():
@@ -147,13 +156,13 @@ def manage_filled(request, page):
 	return render(request, "investmanager/filled_quest.html", context)
 
 def manage_dashboard(request, type, page):
+
 	page = int(page)
 	auth = Authentication(request)
 	if not auth.is_login():
-		# return HttpResponseRedirect("/message/loginfirst")
 		return HttpResponseRedirect(reverse('message', kwargs={'msg': "loginfirst"}))
 	current_user = auth.get_user()
-	close_or_open(request)
+	# close_or_open(request)
 	if type == "filled":
 		results = Result.objects.filter(participant_id = current_user.email)
 	elif type == "created":
@@ -193,12 +202,18 @@ def redirect_to_home(request):
 def modify_quest(request, no):
 	'''modify a quest'''
 
+	auth = Authentication(request)
+	if not auth.is_login():
+		return HttpResponseRedirect(reverse('message', kwargs={'msg': "loginfirst"}))
+
 	try:
 		no = int(no)
 		quest = Questionnaire.objects.get(id=no)
 	except:
 		raise Http404()
 
+	if quest.closed or not quest.released:
+		return HttpResponseRedirect(reverse('message', kwargs={'msg': "errorpage"}))
 	id = quest.id
 	title = quest.title
 	subject = quest.subject
@@ -212,6 +227,11 @@ def modify_quest(request, no):
 
 def resave_quest(request, no):
 	''' save a quest '''
+
+	auth = Authentication(request)
+	if not auth.is_login():
+		return HttpResponseRedirect(reverse('message', kwargs={'msg': "loginfirst"}))
+
 	try:
 		no = int(no)
 		quest = Questionnaire.objects.get(id=no)
@@ -230,6 +250,10 @@ def resave_quest(request, no):
 
 def toggle_state(request, action, no):
 	'''toggle the closed status of a questionnaire '''
+
+	auth = Authentication(request)
+	if not auth.is_login():
+		return HttpResponseRedirect(reverse('message', kwargs={'msg': "loginfirst"}))
 
 	nowStatus = ''
 	if action == 'reopen' or action == 'publish':
