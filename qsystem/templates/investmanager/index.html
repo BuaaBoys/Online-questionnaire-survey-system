@@ -29,8 +29,8 @@
 										<p>Description: {{item.description}}</p>
 										<form>
 										<script type="text/javascript">
-											var url = document.location.host + "/naire{{ item.id }}"
-											document.write("<a href=\"{% url 'home' %}naire{{ item.id }}\">"+ url +"</a>")
+											var url = document.location.host + "{% url 'results:result' item.id %}"
+											document.write("<a href=\"{% url 'results:result' item.id %}\">"+ url +"</a>")
 										</script>
 										</form>
 									</div>
@@ -47,7 +47,7 @@
 							<td><button name = "close" value ="{{ item.id }}" onclick="toggle(this)" class="btn btn-danger btn-xs col-md-4">Close</button>
 							{% endif %}
 							<div class="col-md-1"></div>
-							<a href="{% url 'home' %}naire{{ item.id }}/results" class="btn btn-info btn-xs col-md-4">View</a>
+							<button onclick="location.href='{% url 'results:result' item.id %}'" class="btn btn-info btn-xs col-md-4">View</button>
 							</td>
 						{% else %}
 						<td id="status{{ item.id }}">Draft</td>
@@ -85,7 +85,7 @@
 						{% else %}
 							<td>Open</td>
 						{% endif %}
-						<td><a href="{% url 'naire:results' item.id %}" class="btn btn-info btn-xs col-md-4">View</a></td>
+						<td><button onclick="location.href='{% url 'results:result' item.id %}'" class="btn btn-info btn-xs col-md-4">View</button></td>
 					</tr>
 				{% endfor %}
 			</tbody>
@@ -105,7 +105,11 @@
 				 obj.setAttribute("class", "btn btn-warning btn-xs col-md-4");
 			 } else if (data.status == "Open") {
 				 if (obj.name == "publish") {
-					 $("#edit" + obj.value).remove();
+					 var node = $("#edit" + obj.value)[0];
+					 node.id="view"+obj.value;
+					 node.textContent = "View";
+					 node.setAttribute("class", "btn btn-info btn-xs col-md-4");
+					 node.setAttribute("onclick", "location.href='{% url 'results:result' "123" %}'".replace("123", obj.value));
 					 var publish_num = parseInt($("#badge_published").text());
 					 var draft_num = parseInt($("#badge_draft").text());
 					 $("#badge_published").text(publish_num + 1);

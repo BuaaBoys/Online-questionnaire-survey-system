@@ -26,7 +26,7 @@
 						<div class="col-md-1"></div>
 						<button onclick="toggle(this)" class="btn btn-primary btn-xs col-md-4" name="publish" value="{{ item.id }}">Publish</button>
 						<div class="col-md-1"></div>
-						<button onclick="location.href='{% url 'quest:modify' item.id %}'" class="btn btn-success btn-xs col-md-4" name="edit" value="{{ item.id }}">Edit</button>
+						<button onclick="location.href='{% url 'quest:modify' item.id %}'" id="edit{{ item.id }}" class="btn btn-success btn-xs col-md-4" name="edit" value="{{ item.id }}">Edit</button>
 
 					</div>
 					{% endif %}
@@ -51,17 +51,20 @@
 				 $("#icon" + obj.value).attr("class", "glyphicon glyphicon-lock");
 			 } else if (data.status == "Open") {
 				 if (obj.name == "publish") {
+					 var node = $("#edit" + obj.value)[0];
+					 node.id="view"+obj.value;
+					 node.textContent = "View";
+					 node.setAttribute("class", "btn btn-info btn-xs col-md-4");
+					 node.setAttribute("onclick", "location.href='{% url 'results:result' "123" %}'".replace("123", obj.value));
 					 var publish_num = parseInt($("#badge_published").text());
 					 var draft_num = parseInt($("#badge_draft").text());
 					 $("#badge_published").text(publish_num + 1);
 					 $("#badge_draft").text(draft_num - 1);
-					 $("#no" + obj.value).remove();
-				 } else {
-					 obj.name = "close";
-					 obj.textContent = "Close";
-					 obj.setAttribute("class", "btn btn-danger btn-xs col-md-4");
-					 $("#icon" + obj.value).attr("class", "glyphicon glyphicon-ok green");
-				 }
+				 } 
+				 obj.name = "close";
+				 obj.textContent = "Close";
+				 obj.setAttribute("class", "btn btn-danger btn-xs col-md-4");
+				 $("#icon" + obj.value).attr("class", "glyphicon glyphicon-ok green");
 			 }
 		 });
 	 }
