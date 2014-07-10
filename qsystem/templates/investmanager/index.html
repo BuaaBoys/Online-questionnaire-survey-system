@@ -75,10 +75,10 @@
 			   replace("abc", obj.name).replace(123, obj.value);
 		 $.getJSON(src, function(data) {
 			 //$("td.status:eq(-" + obj.value + ")")[0].innerText = data.status;
-			 $("#status" + obj.value)[0].innerText = data.status;
+			 $("#status" + obj.value)[0].textContent = data.status;
 			 if (data.status == "Closed") {
 				 obj.name = "reopen";
-				 obj.innerText = "Reopen";
+				 obj.textContent = "Reopen";
 				 obj.setAttribute("class", "btn btn-warning btn-xs col-md-4");
 			 } else if (data.status == "Open") {
 				 if (obj.name == "publish") {
@@ -89,7 +89,7 @@
 					 $("#badge_draft").text(draft_num - 1);
 				 }
 				 obj.name = "close";
-				 obj.innerText = "Close";
+				 obj.textContent = "Close";
 				 obj.setAttribute("class", "btn btn-danger btn-xs col-md-4");
 			 }
 		 });

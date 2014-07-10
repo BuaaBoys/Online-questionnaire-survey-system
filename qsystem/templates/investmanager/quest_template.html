@@ -45,7 +45,7 @@
 		 $.getJSON(src, function(data) {
 			 if (data.status == "Closed") {
 				 obj.name = "reopen";
-				 obj.innerText = "Reopen";
+				 obj.textContent = "Reopen";
 				 obj.setAttribute("class", "btn btn-warning btn-xs col-md-4");
 				 $("#icon" + obj.value).attr("class", "glyphicon glyphicon-lock");
 			 } else if (data.status == "Open") {
@@ -57,7 +57,7 @@
 					 $("#no" + obj.value).remove();
 				 } else {
 					 obj.name = "close";
-					 obj.innerText = "Close";
+					 obj.textContent = "Close";
 					 obj.setAttribute("class", "btn btn-danger btn-xs col-md-4");
 					 $("#icon" + obj.value).attr("class", "glyphicon glyphicon-ok green");
 				 }
