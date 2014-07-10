@@ -20,7 +20,47 @@
 					</div>
 					<div class="form-group">
 						<label>Subject:</label>
-						<input type="text" class="form-control" name="subject" maxlength="255" value="{{ subject }}">
+						<!--input type="text" class="form-control" name="subject" maxlength="255" value="{{ subject }}"-->
+						<select class="form-control" name="subject">
+							{% if not subject %}
+								<option>Please select a subject</option>
+							{% endif %}
+							{% if subject == "Brand Promotion" %}
+								<option selected>Brand Promotion</option>
+							{% else %}
+								<option>Brand Promotion</option>
+							{% endif %}
+							{% if subject == "Product Test" %}
+								<option selected>Product Test</option>
+							{% else %}
+								<option>Product Test</option>
+							{% endif %}
+							{% if subject == "Customer Analysis" %}
+								<option selected>Customer Analysis</option>
+							{% else %}
+								<option>Customer Analysis</option>
+							{% endif %}
+							{% if subject == "Human Resource" %}
+								<option selected>Human Resource</option>
+							{% else %}
+								<option>Human Resource</option>
+							{% endif %}
+							{% if subject == "Academy" %}
+								<option selected>Academy</option>
+							{% else %}
+								<option>Academy</option>
+							{% endif %}
+							{% if subject == "Society" %}
+								<option selected>Society</option>
+							{% else %}
+								<option>Society</option>
+							{% endif %}
+							{% if subject == "Others" %}
+								<option selected>Others</option>
+							{% else %}
+								<option>Others</option>
+							{% endif %}
+						</select>
 					</div>
 					<div class="form-group">
 						<label>Description:</label>
