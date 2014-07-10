@@ -101,15 +101,24 @@ def publish(request, qid):
 				if str(request.POST[str(x)]) !=  '' or str(request.POST[str(x)]) !=' ':
 					result.append([str(request.POST[str(x)])])
 
-		auth = Authentication(request)
-		user = auth.get_user()
+		email = ''
 		if user == None:
-			user = "anonymity@admin.com"
-			
+			email = "anonymity@admin.com"
+			Questionnaire_answered = Questionnaire.objects.get(pk=qid)
+			r = Result(questionnaire_id=Questionnaire_answered,participant_id=email,answer=str(result))
+			r.save()
+			print email
+			return render(request, "homepage/message.html", {"message": AlertMessage("success", "Success!", "You have already posted your answers", "/naire"+str(qid)+"/results"),})
+		elif user != None:
+			rts = Result.objects.filter(questionnaire_id=qid)
+			for r in rts:
+				if r.participant_id == user.email:
+					print user.email
+					return render(request, "homepage/message.html", {"message": AlertMessage("warning", "Don't answer same naire twice!", "You've already answered this Questionnaire", "/"),})
 		Questionnaire_answered = Questionnaire.objects.get(pk=qid)
-		r = Result(questionnaire_id=Questionnaire_answered,participant_id=user,answer=str(result))
-		#print str(result)
+		r = Result(questionnaire_id=Questionnaire_answered,participant_id=user.email,answer=str(result))
 		r.save()
+		print user.email
 		return render(request, "homepage/message.html", {"message": AlertMessage("success", "Success!", "You have already posted your answers", "/naire"+str(qid)+"/results"),})
 	except:
 		q = get_object_or_404(Questionnaire, pk=qid)
@@ -117,6 +126,7 @@ def publish(request, qid):
 		Naire.clean()
 		Naire.qid = qid
 		Naire.read(get_object_or_404(Questionnaire, pk=qid).contents)
+		print 'fuck'
 		return render(request, 'results/answer.html',{'Questionnaire':q ,'naire':Naire ,'qid':qid, 'errorMsg':'Not finished yet!'})
 
 def success(request):
