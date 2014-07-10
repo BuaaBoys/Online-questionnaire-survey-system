@@ -10,7 +10,7 @@ from accounts.authentication import Authentication
 class QuestForm(ModelForm):
 	class Meta:
 		model=Questionnaire
-		fields=('title', 'subject', 'description',)
+		fields=('title', 'subject', 'description', )
 
 	def __init__(self, post, questions):
 		ModelForm.__init__(self, post)
@@ -28,8 +28,11 @@ class QuestForm(ModelForm):
 		author = current_user
 		
 		released = False
+		anonymous_limit = False
 		if request.POST['input_action'] == "Publish Questionnaire":
 			released = True
+		if request.POST['anonymous_limit'] == "limit":
+			anonymous_limit = True
 		#print released
 
-		return Questionnaire.objects.create(title=title, subject=subject, description=description, contents=contents, author=author,released =released,)
+		return Questionnaire.objects.create(title=title, subject=subject, description=description, contents=contents, author=author, released =released, anonymous_limit = anonymous_limit)

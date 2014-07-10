@@ -1,18 +1,33 @@
 ﻿function checkValid(){
+
+	var subject = $("select[name^=subject]")[0];
+	console.log(subject.selectedIndex);
+	if (subject.selectedIndex == 0) {
+		subject.style.background = "Aquamarine";
+		alert("Please choose a subject.");
+		subject.style.background = "white";
+		return false;
+	}
+
     var questElement = document.quest.elements;
     for(var i=0; i<questElement.length-1;i++){
+		if (questElement[i].name=="anonymous_limit")
+			continue;
 		if(trim(questElement[i].value)==""){
 			questElement[i].focus();
-			questElement[i].style.background = "red";
-			alert("请填写完整！");
+			questElement[i].style.background = "SpringGreen";
+			alert("Please fill the form completely.");
 			questElement[i].style.background = "white";
 			return false;
 			break;
 		}
     }
+	
+	
+	
     var questionNum = $("div.question").length;
     if (questionNum == 0) {
-	alert("请添加问题！");
+	alert("Please add some questions.");
 	return false;
     }
     for (var i=0; i<questionNum; ++i) {
@@ -22,8 +37,8 @@
 			var items = $("div.question:eq("+i+")").find("div.item");
 			var itemNum = items.length;
 			if (itemNum > 0) {
-				$("div.question:eq("+i+")").find("textarea").css("background", "yellow");
-				alert("请删除选项！");
+				$("div.question:eq("+i+")").find("textarea").css("background", "PapayaWhip");
+				alert("Too more choices.");
 				$("div.question:eq("+i+")").find("textarea").css("background", "white");
 				return false;
 			}
@@ -31,8 +46,8 @@
 			var items = $("div.question:eq("+i+")").find("div.item");
 			var itemNum = items.length;
 			if (itemNum < 2) {
-				$("div.question:eq("+i+")").find("textarea").css("background", "yellow");
-				alert("请补充选项！");
+				$("div.question:eq("+i+")").find("textarea").css("background", "PapayaWhip");
+				alert("Too less choices.");
 				$("div.question:eq("+i+")").find("textarea").css("background", "white");
 				return false;
 			}

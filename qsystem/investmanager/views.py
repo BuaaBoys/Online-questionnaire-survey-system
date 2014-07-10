@@ -32,7 +32,7 @@ def show_quest_fill_page(request):
 		# return HttpResponseRedirect("/message/loginfirst")
 		return HttpResponseRedirect(reverse('message', kwargs={'msg': "loginfirst"}))
 	# return render(request, "investmanager/add_quest.html", {})
-	return render(request, 'investmanager/edit_quest_beauty.html', {'id':'', 'title':'', 'subject':'', 'description':'', 'questions':None},)
+	return render(request, 'investmanager/edit_quest.html', {'id':'', 'title':'', 'subject':'', 'description':'', 'questions':None, "anonymous_limit":False},)
 
 
 def publish(request):
@@ -68,7 +68,7 @@ def quest(request, no):
 	subject = quest.subject
 	description = quest.description
 
-	return render(request, "investmanager/show_quest.html",{"id":id, "title":title, "subject":subject, "description":description,})
+	return render(request, "investmanager/show_quest.html",{"id":id, "title":title, "subject":subject, "description":description})
 
 def close_or_open(request):
 	if request.method == "POST":
@@ -221,11 +221,12 @@ def modify_quest(request, no):
 	subject = quest.subject
 	description = quest.description
 	contents = quest.contents
+	anonymous_limit = quest.anonymous_limit
 	questions = Questions()
 	questions.clean()
 	questions.read(contents)
-	
-	return render(request, 'investmanager/edit_quest_beauty.html', {'id':id, 'title':title, 'subject':subject, 'description':description, 'questions':questions.questionList},)
+
+	return render(request, 'investmanager/edit_quest.html', {'id':id, 'title':title, 'subject':subject, 'description':description, 'questions':questions.questionList, "anonymous_limit":anonymous_limit},)
 
 def resave_quest(request, no):
 	''' save a quest '''
@@ -246,6 +247,9 @@ def resave_quest(request, no):
 	quest.contents = questions.build()
 	if request.POST['input_action'] == "Publish Questionnaire":
 			quest.released = True
+	quest.anonymous_limit = False
+	if request.POST.has_key('anonymous_limit'):
+			quest.anonymous_limit = True
 	quest.save()
 	return HttpResponseRedirect(reverse('quest:home'))
 	
@@ -273,7 +277,7 @@ def toggle_state(request, action, no):
 		
 	data = simplejson.dumps(nowStatus, ensure_ascii = False)
 	response = HttpResponse(data)
-	print response
+
 	return response
 
 def constructQuestions(request):
