@@ -10,6 +10,26 @@
 			break;
 		}
     }
+    var questionNum = $("div.question").length;
+    if (questionNum == 0) {
+	alert("请添加问题！");
+	return false;
+    }
+    for (var i=0; i<questionNum; ++i) {
+	//var question = $(".question")[i];
+	//var itemNum = question.$(".item").length;
+	if (($("div.question")[i].id == 'judge') || ($("div.question")[i].id == 'essay'))
+	    continue;
+	var items = $("div.question:eq("+i+")").find("div.item");
+	var itemNum = items.length;
+	if (itemNum < 2) {
+	    $("div.question:eq("+i+")").find("textarea").css("background", "yellow");
+	    alert("请补充选项！");
+	    $("div.question:eq("+i+")").find("textarea").css("background", "white");
+	    return false;
+	}
+    }
+	
     return true;
 }
 

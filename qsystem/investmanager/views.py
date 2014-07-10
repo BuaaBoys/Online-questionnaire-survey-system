@@ -30,8 +30,9 @@ def show_quest_fill_page(request):
 	if not auth.is_login():
 		# return HttpResponseRedirect("/message/loginfirst")
 		return HttpResponseRedirect(reverse('message', kwargs={'msg': "loginfirst"}))
+	# return render(request, "investmanager/add_quest.html", {})
+	return render(request, 'investmanager/edit_quest.html', {'id':'', 'title':'', 'subject':'', 'description':'', 'questions':None},)
 
-	return render(request, "investmanager/add_quest.html", {})
 
 def publish(request):
 	'''pass basic infomation to next page
@@ -207,10 +208,10 @@ def modify_quest(request, no):
 	questions.clean()
 	questions.read(contents)
 	
-	return render(request, 'investmanager/modify_quest.html', {'id':id, 'title':title, 'subject':subject, 'description':description, 'questions':questions.questionList},)
+	return render(request, 'investmanager/edit_quest.html', {'id':id, 'title':title, 'subject':subject, 'description':description, 'questions':questions.questionList},)
 
-def modify_confirm(request, no):
-	''' confirm a modify '''
+def resave_quest(request, no):
+	''' save a quest '''
 	try:
 		no = int(no)
 		quest = Questionnaire.objects.get(id=no)
@@ -221,6 +222,8 @@ def modify_confirm(request, no):
 	quest.description = request.POST.getlist('description')[0]
 	questions = constructQuestions(request)
 	quest.contents = questions.build()
+	if request.POST['input_action'] == "Publish Questionnaire":
+			quest.released = True
 	quest.save()
 	return HttpResponseRedirect(reverse('quest:home'))
 	

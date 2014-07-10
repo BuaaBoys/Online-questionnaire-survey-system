@@ -16,14 +16,10 @@ def message(request, msg):
 
 
 class AlertMessage():
-	alert_type = ""
-	message_strong = ""
-	message_content = ""
-	redirect_target = ""
 	def __init__(self, alert_type, message_strong, message_content, redirect_target):
 		self.alert_type = alert_type
-		self.message_strong	= message_strong
+		self.message_strong = message_strong
 		self.message_content = message_content
 		self.redirect_target = redirect_target
 	def __str__(self):
-		return message_content
+		return self.message_content

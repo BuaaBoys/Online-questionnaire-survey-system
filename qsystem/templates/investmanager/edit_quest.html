@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
-{% block title %}modify quest{% endblock %}
+{% block title %}
+	{% if id %}
+		Modify Questionnaire
+	{% else %}
+		Add Questionnaire
+	{% endif %}
+{% endblock %}
 {% block body %}
 
 	<div class="container">
@@ -7,7 +13,7 @@
 			<div class="col-md-4"></div>
 			<div class="col-md-4">
 				<script src="{{ STATIC_URL }}js/scripts.js"></script>    
-				<form id="upload" name="quest" action="{% url 'quest:confirm' id %}" method="post" onSubmit="return checkValid()">{% csrf_token %}
+				<form id="upload" name="quest" action={% if id %} "{% url 'quest:resave' id %}" {% else %} "{% url 'quest:publish' %}" {% endif %} method="post" onSubmit="return checkValid()">{% csrf_token %}
 					<div class="form-group">
 						<label>Title:</label>
 						<input type="text" class="form-control" name="title" maxlength="255" value="{{ title }}">
@@ -55,7 +61,9 @@
 						</select>
 						<a class="btn btn-link" onclick="addQuestion()">Add</a>
 					</div>
-					<input type="submit" class="btn btn-primary" value="Save Questionnaire">
+					<input type="submit" class="btn btn-primary" name="input_action" value="Save Questionnaire">
+					<input type="submit" class="btn btn-primary" name="input_action" value="Publish Questionnaire">
+
 				</form>
 			</div>
 			<div class="col-md-4"></div>
