@@ -16,20 +16,28 @@
 	return false;
     }
     for (var i=0; i<questionNum; ++i) {
-	//var question = $(".question")[i];
-	//var itemNum = question.$(".item").length;
-	if (($("div.question")[i].id == 'judge') || ($("div.question")[i].id == 'essay'))
-	    continue;
-	var items = $("div.question:eq("+i+")").find("div.item");
-	var itemNum = items.length;
-	if (itemNum < 2) {
-	    $("div.question:eq("+i+")").find("textarea").css("background", "yellow");
-	    alert("请补充选项！");
-	    $("div.question:eq("+i+")").find("textarea").css("background", "white");
-	    return false;
-	}
+		//var question = $(".question")[i];
+		//var itemNum = question.$(".item").length;
+		if (($("div.question")[i].id == 'judge') || ($("div.question")[i].id == 'essay')) {
+			var items = $("div.question:eq("+i+")").find("div.item");
+			var itemNum = items.length;
+			if (itemNum > 0) {
+				$("div.question:eq("+i+")").find("textarea").css("background", "yellow");
+				alert("请删除选项！");
+				$("div.question:eq("+i+")").find("textarea").css("background", "white");
+				return false;
+			}
+		} else {
+			var items = $("div.question:eq("+i+")").find("div.item");
+			var itemNum = items.length;
+			if (itemNum < 2) {
+				$("div.question:eq("+i+")").find("textarea").css("background", "yellow");
+				alert("请补充选项！");
+				$("div.question:eq("+i+")").find("textarea").css("background", "white");
+				return false;
+			}
+		}
     }
-	
     return true;
 }
 
@@ -235,4 +243,83 @@ function pass_selects(thisform)
 	alert(selects);
 
 	return true;
+}
+
+
+
+function addQuestionJQ() {
+    var questionList = $(".panel-group[id^=accordion]");
+    var insertPlace = $("#addQuestion");
+    var no = questionList.length;
+    var selected = $("#select").find("option:selected");
+    var type = selected.attr("value");
+
+    var data = {
+    	"id": no,
+	"title": (no+1) + "." + selected.text(),
+    	"type": type
+    };
+    var template = $.templates("#questionTmpl");  
+    var newQuestionField = template.render(data);
+
+    insertPlace.before(newQuestionField);
+}
+
+function deleteQuestionJQ(obj) {
+    
+    var parent = $(obj).parents("div.panel-group");
+    parent.remove();
+
+    var questions = $(".question");
+    for (var i=0; i<questions.length; ++i) {
+		var question = questions[i];
+		var type = "";
+		switch (question.id) {
+		case "single":
+			type = "Single Choice";
+			break;
+		case "multiply":
+			type = "Multiply Choice";
+			break;
+		case "judge":
+			type = "Judge";
+			break;
+		case "essay":
+			type = "Essay";
+			break;
+		}
+		//var para = question.getElementsByTagName("p")[0];
+		var para = $(question).find(".col-md-3")[0];
+		para.textContent = (i + 1) + '.' + type;
+		question.setAttribute("no", i);
+    }
+}
+
+function addItemJQ(obj) {
+	var parent = $(obj).parents("div.panel-group");
+	var question = parent.find(".question");
+	var no = question.attr("no");
+	var num = parent.find(".item").length + 1;
+
+	var data = {
+		"no": no,
+		"num": num
+	}
+	
+	var template = $.templates("#itemTmpl");  
+	var newItemField = template.render(data);
+	var insertPlace = parent.find(".panel-body");
+	insertPlace.append(newItemField);
+}
+
+function deleteItemJQ(obj) {
+	var question = $(obj).parents(".question");
+	var item = $(obj).parent();
+	item.remove();
+
+	var items = question.find(".item");
+	for (var i=0; i<items.length; ++i) {
+		var label = items[i].getElementsByTagName("label")[0];
+		label.textContent = "" + (i + 1);
+	}
 }

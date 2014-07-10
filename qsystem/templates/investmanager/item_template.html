@@ -1,0 +1,9 @@
+{% verbatim %}
+	<script id="itemTmpl" type="text/x-jsrender">
+		<div class="item row">
+			<label class="col-md-1">{{:num}}.</label>
+			<div class="col-md-9"><input type="text" class="form-control" name="items{{:no}}" value=""></div>
+			<a class="col-md-1" onclick="deleteItemJQ(this)"><h4><span class="glyphicon glyphicon-remove red"></span></h4></a>
+		</div>
+	</script>
+{% endverbatim %}

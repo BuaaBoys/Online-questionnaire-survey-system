@@ -32,7 +32,7 @@ def show_quest_fill_page(request):
 		# return HttpResponseRedirect("/message/loginfirst")
 		return HttpResponseRedirect(reverse('message', kwargs={'msg': "loginfirst"}))
 	# return render(request, "investmanager/add_quest.html", {})
-	return render(request, 'investmanager/edit_quest.html', {'id':'', 'title':'', 'subject':'', 'description':'', 'questions':None},)
+	return render(request, 'investmanager/edit_quest_beauty.html', {'id':'', 'title':'', 'subject':'', 'description':'', 'questions':None},)
 
 
 def publish(request):
@@ -225,7 +225,7 @@ def modify_quest(request, no):
 	questions.clean()
 	questions.read(contents)
 	
-	return render(request, 'investmanager/edit_quest.html', {'id':id, 'title':title, 'subject':subject, 'description':description, 'questions':questions.questionList},)
+	return render(request, 'investmanager/edit_quest_beauty.html', {'id':id, 'title':title, 'subject':subject, 'description':description, 'questions':questions.questionList},)
 
 def resave_quest(request, no):
 	''' save a quest '''
