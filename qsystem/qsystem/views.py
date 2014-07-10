@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, url
+from django.core.urlresolvers import reverse
 from django.shortcuts import render
 
 def home(request):
@@ -12,6 +13,8 @@ def message(request, msg):
 		message = AlertMessage("success", "Success!", " You are signed up, log in and see what you can do.", "/accounts/login")
 	if msg == "loginfirst":
 		message = AlertMessage("info", "Please log in first.", " You are not allowed to view current page.", "/accounts/login")
+	if msg == "errorpage":
+		message = AlertMessage("warning", "Forbid.", " You are not allowed to view current page.", reverse('home'))
 	return render(request, "homepage/message.html", {"message": message,})
 
 
