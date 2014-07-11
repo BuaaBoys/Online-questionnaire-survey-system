@@ -56,13 +56,13 @@ def publish(request, qid):
 
  		q = get_object_or_404(Questionnaire, pk=qid)		
  		if q.closed or not q.released:
-			raise Exception()
+			return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "You have no right to answer this questionnaire!", "/"),})
 
 		auth = Authentication(request)
 		user = auth.get_user()
 
 		if q.anonymous_limit and user == None:
-			raise Exception()
+			return render(request, "homepage/message.html", {"message": AlertMessage("danger", "Page 404!", "You have no right to answer this questionnaire!", "/"),})
 		elif user != None:
 			if q.permitobjects_limit != '[]':
 				limitlist = eval(q.permitobjects_limit)

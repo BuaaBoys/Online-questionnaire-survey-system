@@ -264,6 +264,7 @@ function pass_selects(thisform)
 
 function addQuestionJQ() {
     var questionList = $(".panel-group[id^=accordion]");
+	var lastQuestionField = $(".panel-group[id^=accordion]:last");
     var insertPlace = $("#addQuestion");
     var no = questionList.length;
     var selected = $("#select").find("option:selected");
@@ -276,8 +277,19 @@ function addQuestionJQ() {
     };
     var template = $.templates("#questionTmpl");  
     var newQuestionField = template.render(data);
+	var toggle = $(lastQuestionField).find(".panel-collapse");
+	toggle.collapse();
 
     insertPlace.before(newQuestionField);
+	
+	button = $(".panel-group[id^=accordion]:last").find("a.addItem");
+	if ((type=="single") || (type=="multiply")) {
+		addItemJQ(button[0]);
+		addItemJQ(button[0]);
+	} else {
+		button.remove();
+	}
+	
 }
 
 function deleteQuestionJQ(obj) {

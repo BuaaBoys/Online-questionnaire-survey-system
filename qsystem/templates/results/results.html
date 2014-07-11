@@ -159,6 +159,9 @@
 			]
 		};*/
 		{% for i in result %}
+		{% for q in naire.questionList %}
+
+		{% if forloop.counter = forloop.parentloop.counter and q.qtype != 'essay'%}
 		var ctx{{forloop.counter}} = document.getElementById("myChart{{forloop.counter}}").getContext("2d");
 		var data{{forloop.counter}} = {
 			labels : [{%for it in i %}"Choice{{forloop.counter}}",{% endfor %}],
@@ -174,6 +177,8 @@
 			]
 		};
 		new Chart(ctx{{forloop.counter}}).Bar(data{{forloop.counter}})
+		{% endif %}
+		{% endfor %}
 		{% endfor %}
 		//new Chart(ctx1).Bar(data1);
 	</script>

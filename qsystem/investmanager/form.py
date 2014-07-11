@@ -31,7 +31,7 @@ class QuestForm(ModelForm):
 		anonymous_limit = False
 		if request.POST['input_action'] == "Publish Questionnaire":
 			released = True
-		if request.POST['anonymous_limit'] == "limit":
+		if request.POST.has_key('anonymous_limit'):
 			anonymous_limit = True
 		#print released
 
