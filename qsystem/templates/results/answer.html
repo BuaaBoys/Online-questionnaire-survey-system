@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}回答问卷{% endblock %}
 {% block body %}
+		<script src="{{ STATIC_URL }}js/scripts.js"></script>
 		<div class="container">
 		<div class="row">
 		<div class="col-md-2"></div>
@@ -31,7 +32,7 @@
 
 			</div>
 		</div>
-		<form role="form" action="{%url 'results:publish' qid%} " method="post">
+		<form name="resultform" role="form" action="{%url 'results:publish' qid%}" method="post">
 			</fieldset>
 			{% csrf_token %}
 			{% for q in naire.questionList %}
@@ -44,27 +45,30 @@
 					</legend>
 					{% if q.qtype == 'single'%}
 					{% for i in q.items %}
-						<input type="radio" name="{{q.qid}}" id="choice{{forloop.counter}}" value="{{forloop.counter}}" autofocus="autofocus"/>
-						<label for="choice{{forloop.counter}}">
+						<input type="radio" name="{{q.qid}}" id="choice{{forloop.parentloop.counter}}-{{forloop.counter}}" value="{{forloop.counter}}" autofocus="autofocus"/>
+						<label for="choice{{forloop.parentloop.counter}}-{{forloop.counter}}">
 							{{i}}
 						</label>
+						</br>
 					{% endfor %}
 					{% endif %}
 					{%if q.qtype == 'multiply'%}
 					{% for i in q.items %}
-						<input type="checkbox" name="{{q.qid}}" id="choice{{forloop.counter}}" value="{{forloop.counter}}" autofocus="autofocus"/>
-						<label for="choice{{forloop.counter}}">
+						<input type="checkbox" name="{{q.qid}}" id="choice{{forloop.parentloop.counter}}-{{forloop.counter}}" value="{{forloop.counter}}" autofocus="autofocus"/>
+						<label for="choice{{forloop.parentloop.counter}}-{{forloop.counter}}">
 							{{i}}
 						</label>
+						</br>
 					{% endfor %}
 					{% endif %}
 					{%if q.qtype == 'judge'%}
-						<input type="radio" name="{{q.qid}}" id="choice1" value="1" autofocus="autofocus"/>
-						<label for="1">
+						<input type="radio" name="{{q.qid}}" id="choice{{forloop.counter}}-1" value="1" autofocus="autofocus"/>
+						<label for="choice{{forloop.counter}}-1">
 							true
 						</label>
-						<input type="radio" name="{{q.qid}}" id="choice2" value="2" autofocus="autofocus"/>
-						<label for="2">
+						</br>
+						<input type="radio" name="{{q.qid}}" id="choice{{forloop.counter}}-2" value="2" autofocus="autofocus"/>
+						<label for="choice{{forloop.counter}}-2">
 							false
 						</label>
 					{% endif %}

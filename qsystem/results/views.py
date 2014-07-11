@@ -126,7 +126,7 @@ def publish(request, qid):
 		Naire.clean()
 		Naire.qid = qid
 		Naire.read(get_object_or_404(Questionnaire, pk=qid).contents)
-		print 'fuck'
+		# print 'fuck'
 		return render(request, 'results/answer.html',{'Questionnaire':q ,'naire':Naire ,'qid':qid, 'errorMsg':'Not finished yet!'})
 
 def success(request):
@@ -142,6 +142,9 @@ def result(request, qid):
 		Naire.qid = qid
 		Naire.read(get_object_or_404(Questionnaire, pk=qid).contents)
 		q = get_object_or_404(Questionnaire, pk=qid)
+		
+		auth = Authentication(request)
+		user = auth.get_user()
 		if not q.released:
 			raise Exception()
 		if q.anonymous_limit and user == None:
