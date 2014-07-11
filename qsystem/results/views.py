@@ -144,6 +144,8 @@ def result(request, qid):
 		q = get_object_or_404(Questionnaire, pk=qid)
 		if not q.released:
 			raise Exception()
+		if q.anonymous_limit and user == None:
+			raise Exception()
 		rts = Result.objects.filter(questionnaire_id=qid)
 
 		# Start doing data collection
