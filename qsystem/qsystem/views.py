@@ -1,9 +1,17 @@
 from django.conf.urls import patterns, url
+from investmanager.models import Questionnaire
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
 
 def home(request):
-	return render(request, "homepage/index.html")
+	released_questionnaires = Questionnaire.objects.filter(released=True, anonymous_limit=False)
+	# TODO judge length
+	slicelen = len(released_questionnaires)
+	if slicelen > 10:
+		return render(request, "homepage/index.html", {"released_quest":released_questionnaires[(slicelen-10):slicelen]})
+	else:
+		return render(request, "homepage/index.html", {"released_quest":released_questionnaires})
+	
 def message(request, msg):
 	if msg == "loggedin":
 		message = AlertMessage("success", "Success!", " You are logged in now.", "/")

@@ -1,22 +1,60 @@
 {% extends 'base.html' %}
 {% block title %}QSystem{% endblock %}
 {% block body %}
-<div class="container">
-	<div class="page-header">
-		<h1>QSystem <small>Design your own questionnaires.</small></h1>
-	</div>
-	<div class="jumbotron">
-  		<h1>Welcome to QSystem,</h1>
-  		<div class="row">
-  			<div class="span4">
-  				<p>start a qustionnaire</p>
-  				<p><a class="btn btn-primary btn-lg" href="{% url 'quest:create' %}" role="button">Click Me</a></p>
-  			</div>
-  			<div class="span4">
-  				<p>manage qustionnaires</p>
-  				<p><a class="btn btn-primary btn-lg" href="{% url 'quest:home' %}" role="button">Click Me</a></p>
+	<div class="container">
+
+		<div class="page-header">
+			<h1>QSystem <small>Design your own questionnaires.</small></h1>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="jumbotron">
+  					<h1>Welcome to QSystem,</h1>
+  					<div class="row">
+  						<div class="span4">
+  							<p>start a qustionnaire</p>
+  							<p><a class="btn btn-primary btn-lg" href="{% url 'quest:create' %}" role="button">Click Me</a></p>
+  						</div>
+  						<div class="span4">
+  							<p>manage qustionnaires</p>
+  							<p><a class="btn btn-primary btn-lg" href="{% url 'quest:home' %}" role="button">Click Me</a></p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">Recent Questionnaires</div>
+					
+					<table class="table" id="filled">
+						<thead>
+							<tr>
+								<th class="col-lg-1">#</th>
+								<th class="col-lg-6">Titile</th>
+								<th class="col-lg-2">Status</th>
+								<th class="col-lg-3">Result</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for item in released_quest reversed%}
+								<tr>
+									<td>{{ item.id }}</td>
+									{% if item.closed %}
+										<td><a href="{% url 'results:result' item.id %}">{{ item.title }}</a></td>
+										<td>Closed</td>
+									{% else %}
+										<td><a href="{% url 'results:answer' item.id %}">{{ item.title }}</a></td>
+										<td>Open</td>
+									{% endif %}
+									<td><button onclick="location.href='{% url 'results:result' item.id %}'" class="btn btn-info btn-xs col-md-4">View</button></td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
+
 	</div>
-</div>
 {% endblock %}
